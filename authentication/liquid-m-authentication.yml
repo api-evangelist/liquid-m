@@ -1,0 +1,17 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/liquid-m-management-openapi.yml, openapi/liquid-m-reporting-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - query
+schemes:
+- name: authToken
+  type: apiKey
+  in: query
+  parameter: auth_token
+  description: AUTH_TOKEN passed as a query parameter on every request, including POSTs.
+  sources:
+  - openapi/liquid-m-management-openapi.yml
+  - openapi/liquid-m-reporting-openapi.yml
