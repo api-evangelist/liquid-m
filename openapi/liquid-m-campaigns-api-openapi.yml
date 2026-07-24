@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: LiquidM Management Ads Campaigns API
+  version: v1
+  description: 'Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.'
+  contact:
+    name: LiquidM open source
+    email: opensource@liquidm.com
+    url: https://github.com/liquidm
+  license:
+    name: MIT
+    url: https://github.com/liquidm/liquidm-management-api/blob/master/LICENSE
+  x-apievangelist-provenance:
+    generated: '2026-07-19'
+    method: generated
+    source: https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+    note: Generated faithfully from LiquidM's own MIT-licensed first-party JavaScript client. Every path, method, parameter, request body wrapper and response field is taken verbatim from that client's request builders and its dry-run response emulators. Nothing is invented. LiquidM's own README marks this API "Under development"; treat the surface as partial.
+servers:
+- url: https://platform.liquidm.com/api/v1
+  description: LiquidM Management API v1
+- url: https://platform.liquidm.com/api/v2
+  description: LiquidM Management API v2 prefix, declared by the first-party client. No v2 operations are exercised by the published client.
+security:
+- authToken: []
+tags:
+- name: Campaigns
+paths:
+  /campaigns:
+    get:
+      operationId: listCampaigns
+      tags:
+      - Campaigns
+      summary: List campaigns for an account
+      parameters:
+      - name: account_id
+        in: query
+        required: true
+        description: LiquidM account id.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Campaign list.
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Authentication failed.
+    post:
+      operationId: createCampaign
+      tags:
+      - Campaigns
+      summary: Create a campaign
+      description: Creates a campaign. The first-party client creates a budget first and passes the resulting budget id in budget_ids.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - campaign
+              properties:
+                campaign:
+                  $ref: '#/components/schemas/Campaign'
+      responses:
+        '200':
+          description: The created campaign.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaign:
+                    $ref: '#/components/schemas/Campaign'
+        '401':
+          description: Authentication failed.
+components:
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        unit_type:
+          type: string
+          example: cpm
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+        advertiser_domain:
+          type: string
+        price_optimization_enabled:
+          type: boolean
+        timezone:
+          type: string
+          example: Berlin
+        account_id:
+          type: integer
+        category_id:
+          type: integer
+          description: IAB category id.
+        budget_ids:
+          type: array
+          items:
+            type: integer
+        ad_ids:
+          type: array
+          items:
+            type: integer
+        decision_interface:
+          type: string
+          example: bidopt
+        additional_name:
+          type: string
+          nullable: true
+        campaign_info:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+  securitySchemes:
+    authToken:
+      type: apiKey
+      in: query
+      name: auth_token
+      description: AUTH_TOKEN passed as a query parameter on every request, including POSTs.

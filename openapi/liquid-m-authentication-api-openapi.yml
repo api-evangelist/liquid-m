@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: LiquidM Management Ads Authentication API
+  version: v1
+  description: 'Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.'
+  contact:
+    name: LiquidM open source
+    email: opensource@liquidm.com
+    url: https://github.com/liquidm
+  license:
+    name: MIT
+    url: https://github.com/liquidm/liquidm-management-api/blob/master/LICENSE
+  x-apievangelist-provenance:
+    generated: '2026-07-19'
+    method: generated
+    source: https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+    note: Generated faithfully from LiquidM's own MIT-licensed first-party JavaScript client. Every path, method, parameter, request body wrapper and response field is taken verbatim from that client's request builders and its dry-run response emulators. Nothing is invented. LiquidM's own README marks this API "Under development"; treat the surface as partial.
+servers:
+- url: https://platform.liquidm.com/api/v1
+  description: LiquidM Management API v1
+- url: https://platform.liquidm.com/api/v2
+  description: LiquidM Management API v2 prefix, declared by the first-party client. No v2 operations are exercised by the published client.
+security:
+- authToken: []
+tags:
+- name: Authentication
+  description: Auth token issuance for the Reporting API.
+paths:
+  /api/auth:
+    get:
+      operationId: createAuthToken
+      tags:
+      - Authentication
+      summary: Issue a Reporting API auth token
+      description: Exchange LiquidM platform login credentials for an AUTH_TOKEN used on all subsequent Reporting API requests. Requesting a new token invalidates the previous one.
+      parameters:
+      - name: email
+        in: query
+        required: true
+        description: LiquidM platform login email.
+        schema:
+          type: string
+          format: email
+      - name: password
+        in: query
+        required: true
+        description: LiquidM platform login password.
+        schema:
+          type: string
+          format: password
+      - name: api
+        in: query
+        required: true
+        description: Must be true to request an API token.
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: An auth token was issued.
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Authentication failed.
+components:
+  securitySchemes:
+    authToken:
+      type: apiKey
+      in: query
+      name: auth_token
+      description: AUTH_TOKEN passed as a query parameter on every request, including POSTs.
