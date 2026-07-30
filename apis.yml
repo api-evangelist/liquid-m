@@ -1,22 +1,190 @@
 aid: liquid-m
 name: Liquid M
-description: Liquid M is a company surfaced as a portfolio company of earlybird and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  LiquidM Technology GmbH is a Berlin-based demand-side platform for programmatic
+  advertising, backed by Earlybird. Its platform at platform.liquidm.com exposes
+  two developer surfaces: a Reporting API that returns the same data as the
+  platform's Visual Reports UI, split across more than thirty dimensions
+  (campaign, ad, site, domain, device, geo, audience) and thirty-plus metrics
+  (impressions, bids, bid requests, clicks, CTR, win rate, eCPM, conversion
+  funnels, video quartiles); and a campaign Management API covering campaigns,
+  budgets and ads. LiquidM publishes a first-party MIT-licensed JavaScript client
+  for the Management API and an example Ruby client for the Reporting API from a
+  100-repo public GitHub organization. The liquidm.com marketing domain now
+  redirects to Equativ, though the platform host and its APIs remain reachable.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://avatars.githubusercontent.com/u/5937978?v=4
 url: https://raw.githubusercontent.com/api-evangelist/liquid-m/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - earlybird
-x-tier: stub
+x-tier: enriched
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- Advertising
+- AdTech
+- Demand-Side Platform
+- Programmatic Advertising
+- Mobile Advertising
+- Reporting
+- Analytics
+- Campaign Management
+- OpenRTB
+apis:
+- aid: liquid-m:liquid-m-ads-api
+  name: Liquid M Ads API
+  description: The Ads API from Liquid M — 1 operation(s) for ads.
+  humanURL: https://github.com/liquidm/liquidm-reporting-api-client
+  baseURL: https://platform.liquidm.com
+  tags:
+  - Ads
+  properties:
+  - type: OpenAPI
+    url: openapi/liquid-m-ads-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-reporting-api-client
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-management-api
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-management-api
+- aid: liquid-m:liquid-m-authentication-api
+  name: Liquid M Authentication API
+  description: Auth token issuance for the Reporting API.
+  humanURL: https://github.com/liquidm/liquidm-reporting-api-client
+  baseURL: https://platform.liquidm.com
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/liquid-m-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-reporting-api-client
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-management-api
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-management-api
+- aid: liquid-m:liquid-m-budgets-api
+  name: Liquid M Budgets API
+  description: The Budgets API from Liquid M — 1 operation(s) for budgets.
+  humanURL: https://github.com/liquidm/liquidm-reporting-api-client
+  baseURL: https://platform.liquidm.com
+  tags:
+  - Budgets
+  properties:
+  - type: OpenAPI
+    url: openapi/liquid-m-budgets-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-reporting-api-client
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-management-api
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-management-api
+- aid: liquid-m:liquid-m-campaigns-api
+  name: Liquid M Campaigns API
+  description: The Campaigns API from Liquid M — 1 operation(s) for campaigns.
+  humanURL: https://github.com/liquidm/liquidm-reporting-api-client
+  baseURL: https://platform.liquidm.com
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/liquid-m-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-reporting-api-client
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-management-api
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-management-api
+- aid: liquid-m:liquid-m-reporting-api
+  name: Liquid M Reporting API
+  description: Visual report queries across dimensions and metrics.
+  humanURL: https://github.com/liquidm/liquidm-reporting-api-client
+  baseURL: https://platform.liquidm.com
+  tags:
+  - Reporting
+  properties:
+  - type: OpenAPI
+    url: openapi/liquid-m-reporting-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-reporting-api-client
+  - type: Documentation
+    url: https://github.com/liquidm/liquidm-management-api
+  - type: SourceCode
+    url: https://github.com/liquidm/liquidm-management-api
+common:
+- type: GitHubOrganization
+  url: https://github.com/liquidm
+- type: Website
+  url: https://liquidm.com
+- type: Portal
+  url: https://platform.liquidm.com
+- type: SignUp
+  url: https://platform.liquidm.com
+- type: Authentication
+  url: authentication/liquid-m-authentication.yml
+- type: Conventions
+  url: conventions/liquid-m-conventions.yml
+- type: ErrorCatalog
+  url: errors/liquid-m-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/liquid-m-lifecycle.yml
+- type: Conformance
+  url: conformance/liquid-m-conformance.yml
+- type: Vocabulary
+  url: vocabulary/liquid-m-vocabulary.yml
+- type: DataModel
+  url: data-model/liquid-m-data-model.yml
+- type: Packages
+  url: packages/liquid-m-packages.yml
+- type: SDKs
+  url: packages/liquid-m-packages.yml
+- type: Examples
+  url: examples/liquid-m-visual-report-response.json
+- type: JSONSchema
+  url: json-schema/liquid-m-visual-report.json
+- type: WellKnown
+  url: well-known/liquid-m-well-known.yml
+- type: DomainSecurity
+  url: security/liquid-m-domain-security.yml
+- type: MCPServer
+  url: mcp/liquid-m-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/liquid-m-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
