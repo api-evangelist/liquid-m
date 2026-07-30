@@ -1,0 +1,22 @@
+{
+  "provider": "liquid-m",
+  "sources": [
+    "liquid-m-ads-api-openapi.yml",
+    "liquid-m-authentication-api-openapi.yml",
+    "liquid-m-budgets-api-openapi.yml",
+    "liquid-m-campaigns-api-openapi.yml",
+    "liquid-m-reporting-api-openapi.yml"
+  ],
+  "outputs": [
+    "liquid-m-ads-api-openapi.yml",
+    "liquid-m-authentication-api-openapi.yml",
+    "liquid-m-budgets-api-openapi.yml",
+    "liquid-m-campaigns-api-openapi.yml",
+    "liquid-m-reporting-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

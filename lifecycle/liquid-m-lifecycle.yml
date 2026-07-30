@@ -1,0 +1,58 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  openapi/liquid-m-management-openapi.yml,
+  https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js,
+  live host probes
+versioning:
+  scheme: uri-path
+  current: v1
+  known_versions: [v1, v2]
+  detail: >-
+    The Management API carries the version in the path. LiquidM's first-party
+    client declares both urlPrefixV1 (https://platform.liquidm.com/api/v1/) and
+    urlPrefixV2 (https://platform.liquidm.com/api/v2/) but implements every
+    method against v1 only, so the v2 surface is undocumented. The Reporting API
+    is unversioned: it is a single /visual_reports.json resource.
+  docs: null
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  note: >-
+    No deprecation policy, sunset schedule or RFC 8594 Sunset/Deprecation header
+    support is documented or observable.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  probed:
+  - {host: status.liquidm.com, result: NXDOMAIN}
+  - {host: liquidm.statuspage.io, result: redirects to atlassian.com marketing page, hosted_page: false}
+deprecated_operations: []
+maturity:
+  reporting_api:
+    state: documented
+    evidence: >-
+      Full parameter, dimension, metric and response documentation published in
+      the client README; live endpoint returned HTTP 401 (auth required) rather
+      than 404 on 2026-07-19.
+    last_source_change: '2022-10-06'
+  management_api:
+    state: under-development
+    evidence: >-
+      LiquidM's own README for liquidm-management-api reads "Under
+      development...". The client covers campaigns, budgets and ads only.
+    last_source_change: '2019-04-30'
+corporate:
+  note: >-
+    The liquidm.com marketing domain 301-redirects to https://www.equativ.com/advertisers
+    for every path probed on 2026-07-19, indicating the brand's web presence has
+    been folded into Equativ. The platform host platform.liquidm.com remains live
+    and serves the Ember application, and the Reporting API endpoint still
+    responds. Recorded as an observation; API Evangelist has not sourced a
+    corporate announcement confirming the relationship.
+  observed: '2026-07-19'

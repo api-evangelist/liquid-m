@@ -1,0 +1,21 @@
+generated: '2026-07-19'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: liquidm.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Jul 20 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: platform.liquidm.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Oct  2 08:04:11 2026 GMT
+  hsts: false
+domains:
+- domain: liquidm.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: false

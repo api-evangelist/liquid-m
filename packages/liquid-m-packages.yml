@@ -1,0 +1,51 @@
+generated: '2026-07-19'
+method: searched
+source: >-
+  npm registry search, PyPI, RubyGems, and the liquidm GitHub organization
+note: >-
+  LiquidM does not publish its API client libraries to a package registry. The
+  Reporting API client is installed directly from git (the README's Gemfile line
+  uses a git: source and there is no liquidm-reporting-api-client gem on
+  RubyGems), and the Management API client is a single MIT-licensed JavaScript
+  file served from its repository. One first-party general-purpose gem
+  (liquid-ext) is published to RubyGems under the "LiquidM, Inc." author.
+packages:
+- language: ruby
+  registry: git
+  name: liquidm-reporting-api-client
+  url: https://github.com/liquidm/liquidm-reporting-api-client
+  install: "gem 'liquidm-reporting-api-client', git: 'git://github.com/liquidm/liquidm-reporting-api-client.git'"
+  official: true
+  kind: sdk
+  api: openapi/liquid-m-reporting-openapi.yml
+  published_registry: false
+  note: >-
+    LiquidM describes this as an example client implementation for the Reporting
+    API. Exposes LiquidM::ReportingClient#query.
+- language: javascript
+  registry: github
+  name: lqmapi.js
+  url: https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+  install: "Include js/lqmapi.js from the repository (requires jQuery for $.ajax)."
+  official: true
+  license: MIT
+  kind: sdk
+  api: openapi/liquid-m-management-openapi.yml
+  published_registry: false
+  note: >-
+    First-party Management API client, copyright LiquidM Technology GmbH.
+    Provides getCampaigns, getAds, createCampaign, createBudget, createAd plus a
+    dry-run mode.
+- language: ruby
+  registry: rubygems
+  name: liquid-ext
+  url: https://rubygems.org/gems/liquid-ext
+  install: gem install liquid-ext
+  official: true
+  license: MIT
+  kind: utility
+  version: 3.5.3
+  note: >-
+    LiquidM ruby core extensions and helper libraries, authored by "LiquidM,
+    Inc.". Not an API client; catalogued as first-party published software.
+official_sdk_count: 2

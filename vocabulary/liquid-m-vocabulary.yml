@@ -1,0 +1,169 @@
+generated: '2026-07-19'
+method: searched
+source: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+description: >-
+  The LiquidM Reporting API's controlled vocabulary. Every dimension is also
+  usable as a filter (filters take the form <dimension>-<value>). Names in the
+  "label" field are the names LiquidM shows in Visual Reports.
+dimensions:
+- id: advertiser_customer
+  label: Advertiser Customer
+  description: Splits the result by customer, if you manage multiple customers in LiquidM.
+- id: advertiser_account
+  label: Advertiser Account
+  description: Split the result by account, if you manage multiple accounts in LiquidM.
+- id: campaign
+  label: Campaign
+  description: Split by campaign.
+- id: ad
+  label: Ad
+  description: Split by ad.
+- id: budget
+  label: Budget
+  description: Split by budget.
+- id: account
+  label: Publisher Account
+  description: Split by SSP.
+- id: site
+  label: Site
+  description: Split by placement.
+- id: domain
+  label: Domain
+  description: Split by domain.
+- id: supply_type
+  label: Supply Type
+  description: Split by app / site.
+- id: age
+  label: Age
+  description: Split by age group.
+- id: gender
+  label: Gender
+  description: Split by gender.
+- id: country
+  label: Country
+  description: Split per country.
+- id: carrier
+  label: Carrier
+  description: Split by carrier / ISP.
+- id: connection_type
+  label: Connection type
+  description: Split by connection type.
+- id: region
+  label: Region
+  description: Split by region (region, DMA, city, ZIP code).
+- id: category
+  label: Category
+  description: Split by IAB category.
+- id: devicetype
+  label: Device Type
+  description: Split by IAB device type.
+- id: device_brand
+  label: Device Brand
+  description: Split by device manufacturer.
+- id: device_model
+  label: Device Model
+  description: Split by device model.
+- id: os_name
+  label: OS
+  description: Split by Operating System.
+- id: os_version
+  label: OS version
+  description: Split by OS version.
+- id: banner_height
+  label: Banner Height
+  description: Split by Height of the placement.
+- id: banner_width
+  label: Banner Width
+  description: Split by Width of the placement.
+- id: geo_location
+  label: Geo Location
+  description: Split by geo location circles.
+- id: video_startdelay
+  label: Video Placement
+  description: Split by video placement type.
+- id: media_type
+  label: Media Type
+  description: Split by Display / Native / Video / Audio.
+- id: audience_provider
+  label: Audience Provider
+  description: Split by audience provider.
+- id: audience_id
+  label: Audience Targeting
+  description: Split by audience targeting id.
+- id: language
+  label: Device Language
+  description: Split by language of the device.
+- id: retargeting_lists
+  label: Segment Id
+  description: Split by segment Id.
+metrics:
+- id: ais
+  label: Ad Impressions
+  description: Amount of delivered impressions.
+- id: bids
+  label: Bids
+  description: Amount of Bid Responses.
+- id: bid_requests
+  label: Bid Requests
+  description: Amount of all Auctions.
+- id: clicks
+  label: Clicks
+  description: Amount of clicks tracked.
+- id: ctr
+  label: CTR
+  description: clicks/ais
+- id: downloads
+  label: Conversion 1 (Downloads)
+  description: Amount of conversions pinged to the LiquidM.
+- id: downloads2
+  label: Conversion 2
+  description: Amount of 2nd level funnel events pinged to LiquidM.
+- id: downloads3
+  label: Conversion 3
+  description: Amount of 3rd level funnel events pinged to LiquidM.
+- id: downloads_value
+  label: Conversion Value
+  description: 'Value added to conversion event (Example: 1.99).'
+- id: e_cpc
+  label: eCPC
+  description: cost/clicks
+- id: e_cpx1
+  label: eCPX 1
+  description: cost/downloads
+- id: e_cpx2
+  label: eCPX 2
+  description: cost/downloads2
+- id: e_cpx3
+  label: eCPX 3
+  description: cost/downloads3
+- id: e_cpm
+  label: eCPM
+  description: cost/ais * 1000
+- id: earnings
+  label: Cost
+  description: Supply Cost.
+- id: win_rate
+  label: Win Rate
+  description: ais/bids
+- id: conversion_rate
+  label: Conversion Rate
+  description: downloads1/ais
+- id: video_firstquartile
+  label: Video 25% Viewed
+  description: Video 25% Viewed.
+- id: video_midpoint
+  label: Video 50% Viewed
+  description: Video 50% Viewed.
+- id: video_thirdquartile
+  label: Video 75% Viewed
+  description: Video 75% Viewed.
+- id: video_complete
+  label: Video 100% Viewed
+  description: Video 100% Viewed.
+- id: user_token_hash
+  label: Estimation of unique users
+  description: Estimation of unique users.
+enumerations:
+- id: granularity
+  values: [all, day, hour]
+  default: all

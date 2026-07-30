@@ -1,0 +1,35 @@
+{
+  "columns": [
+    {
+      "id": "country",
+      "name": "Country"
+    },
+    {
+      "id": "ais",
+      "name": "AIs"
+    },
+    {
+      "id": "clicks",
+      "name": "Clicks"
+    }
+  ],
+  "dimensions": [
+    "country"
+  ],
+  "rows": [
+    {
+      "ais": {
+        "formatted_value": "81",
+        "value": 81
+      },
+      "clicks": {
+        "formatted_value": "1",
+        "value": 1
+      },
+      "country": {
+        "name": "COUNTRY1",
+        "value": 98
+      }
+    }
+  ]
+}

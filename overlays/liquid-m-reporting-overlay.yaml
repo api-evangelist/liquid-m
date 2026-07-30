@@ -1,0 +1,39 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the LiquidM Reporting API
+  version: 1.0.0
+extends: openapi/liquid-m-reporting-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      vocabulary: vocabulary/liquid-m-vocabulary.yml
+      conventions: conventions/liquid-m-conventions.yml
+      errors: errors/liquid-m-problem-types.yml
+      authentication: authentication/liquid-m-authentication.yml
+      lifecycle: lifecycle/liquid-m-lifecycle.yml
+      data_model: data-model/liquid-m-data-model.yml
+    x-apievangelist-source-of-truth: >-
+      https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+- target: $.paths['/visual_reports.json'].get
+  update:
+    x-apievangelist-vocabulary-ref: vocabulary/liquid-m-vocabulary.yml
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      token:
+        max-ttl-seconds: 3600
+      audit: optional
+- target: $.paths['/api/auth'].get
+  update:
+    x-apievangelist-warning: >-
+      Credentials are passed as query parameters, which are routinely logged by
+      proxies, browsers and server access logs. Issuing a new token also
+      invalidates the previous token for every other consumer.
+    x-agentic-access:
+      action-class: acting
+      consequence: write
+      token:
+        max-ttl-seconds: 900
+      audit: required
+      human-in-the-loop: recommended

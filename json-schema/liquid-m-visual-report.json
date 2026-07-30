@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/liquid-m/refs/heads/main/json-schema/liquid-m-visual-report.json",
+  "title": "LiquidM Visual Report",
+  "description": "Response of GET /visual_reports.json on the LiquidM Reporting API. Derived from openapi/liquid-m-reporting-openapi.yml, which was generated from LiquidM's published Reporting API README.",
+  "type": "object",
+  "properties": {
+    "dimensions": {
+      "type": "array",
+      "description": "The dimensions list used for this report.",
+      "items": { "type": "string" }
+    },
+    "columns": {
+      "type": "array",
+      "description": "The reported columns, each with an id and a name.",
+      "items": { "$ref": "#/$defs/ReportColumn" }
+    },
+    "rows": {
+      "type": "array",
+      "description": "One flat row list. Never nested, even when dimensions are specified.",
+      "items": { "$ref": "#/$defs/ReportRow" }
+    }
+  },
+  "$defs": {
+    "ReportColumn": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Column identifier, matching a dimension or metric id." },
+        "name": { "type": "string", "description": "Human-readable column name as shown in Visual Reports." }
+      }
+    },
+    "ReportRow": {
+      "type": "object",
+      "description": "Map of column id to a cell.",
+      "additionalProperties": { "$ref": "#/$defs/ReportCell" }
+    },
+    "ReportCell": {
+      "type": "object",
+      "properties": {
+        "value": { "description": "Internal representation of the value. May change unit representation over time." },
+        "formatted_value": { "type": "string", "description": "Human-readable representation. Persistent." },
+        "name": { "type": "string", "description": "Present instead of formatted_value when the cell is an entity." }
+      }
+    }
+  }
+}

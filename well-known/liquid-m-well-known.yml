@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: live probes of https://platform.liquidm.com and https://liquidm.com
+note: >-
+  platform.liquidm.com is an Ember single-page application whose server returns
+  the SPA shell with HTTP 200 for unmatched paths. Every /.well-known/ probe
+  therefore returned 200 with an HTML body rather than the expected document, so
+  each is recorded as a soft 404 (soft_404: true). No real well-known discovery
+  document is published. liquidm.com 301-redirects to Equativ.
+hosts:
+- host: https://platform.liquidm.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    soft_404: true
+    content_type: text/html
+    found: false
+  - path: /.well-known/openid-configuration
+    status: 200
+    soft_404: true
+    content_type: text/html
+    found: false
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    soft_404: true
+    content_type: text/html
+    found: false
+  - path: /.well-known/api-catalog
+    status: 200
+    soft_404: true
+    content_type: text/html
+    found: false
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    soft_404: true
+    content_type: text/html
+    found: false
+- host: https://liquidm.com
+  note: 301 redirect to https://www.equativ.com/advertisers for all paths
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+    found: false
+documents_found: 0

@@ -1,0 +1,128 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  openapi/liquid-m-management-openapi.yml,
+  vocabulary/liquid-m-vocabulary.yml
+description: >-
+  Entity graph for the LiquidM demand-side platform, derived from the id-reference
+  fields in the Management API schemas and from the reporting dimension hierarchy.
+entities:
+- name: Account
+  description: >-
+    A LiquidM account. Campaigns belong to an account; a customer may manage
+    multiple accounts.
+  key: account_id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Campaign
+  relationships:
+  - type: has_many
+    target: Campaign
+    via: account_id
+- name: Campaign
+  description: >-
+    A programmatic advertising campaign carrying unit type, currency, advertiser
+    domain, pacing timezone, IAB category and a price-optimization flag.
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Campaign
+  relationships:
+  - type: belongs_to
+    target: Account
+    via: account_id
+  - type: has_many
+    target: Budget
+    via: budget_ids
+  - type: has_many
+    target: Ad
+    via: ad_ids
+  - type: belongs_to
+    target: Category
+    via: category_id
+- name: Budget
+  description: >-
+    Spend and pacing envelope for a campaign, with overall and daily caps in both
+    cents and units, each with its own pacing mode.
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Budget
+  relationships:
+  - type: belongs_to
+    target: Campaign
+    via: campaign_id
+- name: Ad
+  description: >-
+    A deliverable ad within a campaign. Binds four configuration sections and
+    carries delivery diagnostics and an exchange approval state.
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Ad
+  relationships:
+  - type: belongs_to
+    target: Campaign
+    via: campaign_id
+  - type: has_one
+    target: Creative
+    via: creative_id
+  - type: has_one
+    target: Supply
+    via: supply_id
+  - type: has_one
+    target: Targeting
+    via: targeting_id
+  - type: has_one
+    target: Setting
+    via: setting_id
+- name: Creative
+  description: >-
+    Creative section of an ad. Referenced by creative_id and configurable through
+    creative_section_id / creative_section_type.
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Ad
+  relationships:
+  - type: belongs_to
+    target: Ad
+    via: creative_id
+- name: Supply
+  description: >-
+    Supply section of an ad, selecting the inventory sources the ad bids into.
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Ad
+  relationships:
+  - type: belongs_to
+    target: Ad
+    via: supply_id
+- name: Targeting
+  description: Targeting section of an ad (geo, device, audience, category).
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Ad
+  relationships:
+  - type: belongs_to
+    target: Ad
+    via: targeting_id
+- name: Setting
+  description: Setting section of an ad.
+  key: id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Ad
+  relationships:
+  - type: belongs_to
+    target: Ad
+    via: setting_id
+- name: Category
+  description: IAB content category assigned to a campaign.
+  key: category_id
+  source: openapi/liquid-m-management-openapi.yml#/components/schemas/Campaign
+reporting_dimensions:
+  note: >-
+    The Reporting API exposes an additional read-only hierarchy that has no
+    Management API write surface. Listed here as reporting entities, from
+    vocabulary/liquid-m-vocabulary.yml.
+  entities:
+  - {name: AdvertiserCustomer, dimension: advertiser_customer}
+  - {name: AdvertiserAccount, dimension: advertiser_account}
+  - {name: PublisherAccount, dimension: account, note: the SSP}
+  - {name: Site, dimension: site, note: a placement}
+  - {name: Domain, dimension: domain}
+  - {name: AudienceProvider, dimension: audience_provider}
+  - {name: AudienceSegment, dimension: audience_id}
+  - {name: RetargetingList, dimension: retargeting_lists}
+ad_section_order:
+  note: >-
+    Ads carry a section_order array that governs the configuration sequence in
+    the platform UI.
+  default: [Targeting, Supply, Creative, Setting]

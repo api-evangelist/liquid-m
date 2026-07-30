@@ -1,0 +1,73 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the LiquidM Management API
+  version: 1.0.0
+extends: openapi/liquid-m-management-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      conventions: conventions/liquid-m-conventions.yml
+      errors: errors/liquid-m-problem-types.yml
+      authentication: authentication/liquid-m-authentication.yml
+      lifecycle: lifecycle/liquid-m-lifecycle.yml
+      data_model: data-model/liquid-m-data-model.yml
+    x-apievangelist-maturity: >-
+      LiquidM's own README marks this API "Under development". Only the campaign,
+      budget and ad surface exercised by the first-party JavaScript client is
+      documented; the declared /api/v2/ prefix has no published operations.
+    x-apievangelist-source-of-truth: >-
+      https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+- target: $.paths['/campaigns'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      token: {max-ttl-seconds: 3600}
+      audit: optional
+- target: $.paths['/ads'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      token: {max-ttl-seconds: 3600}
+      audit: optional
+- target: $.paths['/campaigns'].post
+  update:
+    x-apievangelist-ordering: >-
+      Create the budget first; the campaign is created with the resulting budget
+      id in budget_ids.
+    x-apievangelist-idempotency: >-
+      No idempotency key is supported. A retried create may produce a duplicate
+      campaign.
+    x-agentic-access:
+      action-class: acting
+      consequence: physical
+      token: {max-ttl-seconds: 300}
+      audit: required
+      human-in-the-loop: recommended
+      purpose-required: true
+- target: $.paths['/budgets'].post
+  update:
+    x-apievangelist-idempotency: >-
+      No idempotency key is supported. A retried create may produce a duplicate
+      budget and double the intended spend envelope.
+    x-agentic-access:
+      action-class: acting
+      consequence: physical
+      token: {max-ttl-seconds: 300}
+      audit: required
+      human-in-the-loop: recommended
+      purpose-required: true
+- target: $.paths['/ads'].post
+  update:
+    x-apievangelist-validation: >-
+      A 200 does not mean the ad can deliver. Inspect meta.errors for per-section
+      validation failures and the ad's delivery_errors / delivery_warnings arrays.
+    x-agentic-access:
+      action-class: acting
+      consequence: physical
+      token: {max-ttl-seconds: 300}
+      audit: required
+      human-in-the-loop: recommended
+      purpose-required: true

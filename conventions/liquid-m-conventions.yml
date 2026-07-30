@@ -1,0 +1,94 @@
+generated: '2026-07-19'
+method: searched
+source: >-
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md,
+  https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+description: >-
+  Cross-cutting request and response semantics for the LiquidM platform APIs,
+  captured from LiquidM's own published documentation and first-party clients.
+authentication:
+  style: api-key
+  location: query
+  parameter: auth_token
+  issuance: >-
+    GET https://platform.liquidm.com/api/auth?email=[EMAIL]&password=[PASSWORD]&api=true
+  rotation: >-
+    Requesting a new AUTH_TOKEN immediately invalidates the previous one. There is
+    only one active token per user.
+  applies_to: all requests, including POSTs
+  artifact: authentication/liquid-m-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    LiquidM documents no idempotency key, no request-deduplication header and no
+    retry-safety contract for the Management API's POST operations. The
+    first-party JavaScript client instead offers a client-side dryrun flag that
+    substitutes local response emulators for the real POST, which is a preview
+    aid rather than an idempotency guarantee.
+pagination:
+  supported: false
+  note: >-
+    Neither the Reporting API nor the documented Management API surface exposes
+    paging parameters or paging response fields. Reporting responses return one
+    flat rows list regardless of how many dimensions are requested.
+filtering:
+  style: comma-separated filter list
+  parameter: filters
+  syntax: <dimension>-<value>
+  example: banner_height-50,banner_height-200
+  note: Every reporting dimension is also available as a filter.
+field_selection:
+  style: comma-separated projection
+  parameters:
+    dimensions: Splits the result per requested dimension.
+    metrics: Selects which metrics appear in the report.
+  default_metrics: ais,cost
+  vocabulary: vocabulary/liquid-m-vocabulary.yml
+expansion:
+  style: embed parameter
+  parameter: embed
+  applies_to: GET /api/v1/ads
+  syntax: comma-separated list of associations
+request_tracing:
+  supported: false
+  note: No request-id or correlation header is documented.
+versioning:
+  scheme: uri-path
+  current: v1
+  detail: >-
+    The Management API is versioned in the path (/api/v1/, /api/v2/). The
+    first-party client declares both a v1 and a v2 URL prefix but exercises only
+    v1. The Reporting API is unversioned (/visual_reports.json).
+  artifact: lifecycle/liquid-m-lifecycle.yml
+error_envelope:
+  style: http-status-only
+  detail: >-
+    LiquidM states the API uses HTTP return codes: 200 on success, and other
+    codes such as 401 when authentication was wrong. No structured error body,
+    error code registry or RFC 9457 problem+json envelope is documented.
+  validation_errors: >-
+    Ad creation returns a meta.errors object keyed by ad section (creative,
+    setting, targeting) with an array of messages per section, alongside
+    delivery_warnings and delivery_errors arrays on the ad itself.
+  artifact: errors/liquid-m-problem-types.yml
+rate_limiting:
+  documented: false
+  note: No rate limits, quota headers or throttling behaviour are documented.
+content_negotiation:
+  response_media_type: application/json
+  request_media_type: application/x-www-form-urlencoded
+  note: >-
+    The first-party JavaScript client posts form-encoded bodies via jQuery's
+    default $.ajax serialization, with the resource wrapped in a named key
+    (campaign, budget, ad).
+value_representation:
+  detail: >-
+    Reporting cells carry both value and formatted_value. LiquidM warns that
+    formatted_value is persistent while value may change representation (for
+    example from microcents to cents), so consumers should not treat value as a
+    stable unit. Entity cells carry name instead of formatted_value.
+  currency: ISO 4217 codes, default EUR
+  dates: ISO 8601 date strings for reporting, ISO 8601 date-time for budgets
+  timezones: >-
+    Rails TimeZone constants. Only whole-hour offsets from UTC are supported;
+    30-minute offsets are not possible.

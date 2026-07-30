@@ -1,0 +1,48 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  openapi/liquid-m-reporting-openapi.yml, openapi/liquid-m-management-openapi.yml,
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+format: http-status
+note: >-
+  LiquidM does not publish an error-code registry or an RFC 9457 problem+json
+  envelope. Its documentation states only that the API uses HTTP return codes,
+  with 200 on success and other codes such as 401 when authentication was wrong.
+  The problems below are what LiquidM actually documents plus the section-level
+  validation errors its first-party client demonstrates. Nothing is inferred
+  beyond those sources.
+problems:
+- status: 401
+  title: Authentication failed
+  detail: >-
+    The auth_token was missing, wrong, or has been invalidated by issuing a newer
+    token. Re-issue a token via GET /api/auth.
+  remediation: >-
+    Request a fresh AUTH_TOKEN from /api/auth and retry. Note that issuing a new
+    token invalidates the old one, so a shared token rotated elsewhere will begin
+    returning 401.
+  source_operation: openapi/liquid-m-reporting-openapi.yml#getVisualReport
+  observed: >-
+    Live probe of https://platform.liquidm.com/visual_reports.json without a
+    token returned HTTP 401 on 2026-07-19.
+validation_errors:
+  envelope: meta.errors
+  applies_to: openapi/liquid-m-management-openapi.yml#createAd
+  shape: >-
+    An object keyed by ad section name, each mapping to an array of message
+    strings.
+  known_sections: [creative, setting, targeting]
+  example_message: is not valid
+delivery_diagnostics:
+  note: >-
+    Ads additionally carry non-fatal diagnostic arrays reporting why an ad cannot
+    yet deliver. These are not HTTP errors.
+  fields:
+  - field: delivery_warnings
+    example: >-
+      Your creative uses non-secure connection(s). Make sure all requested assets
+      have a secure connection (https)!
+  - field: delivery_errors
+    example: Your ad cannot deliver. Some required inputs are missing.
+  - field: appnexus_approval_info
+    example: AppNexus creative approval is PENDING.

@@ -1,0 +1,54 @@
+# LiquidM
+
+> LiquidM Technology GmbH is a Berlin-based demand-side platform (DSP) for
+> programmatic advertising, backed by Earlybird. Its platform at
+> platform.liquidm.com exposes a Reporting API for campaign performance data and
+> a campaign Management API for campaigns, budgets and ads. LiquidM publishes no
+> developer portal; its APIs are documented in first-party GitHub repositories.
+> The liquidm.com marketing domain now redirects to Equativ, though the platform
+> host and its APIs remain reachable.
+
+## APIs
+
+- [LiquidM Reporting API](https://github.com/liquidm/liquidm-reporting-api-client): Query the same data as the platform's Visual Reports UI. One GET against /visual_reports.json takes a date range, a granularity, and comma-separated dimensions, filters and metrics.
+- [LiquidM Management API](https://github.com/liquidm/liquidm-management-api): Campaign management over campaigns, budgets and ads. Marked "Under development" by LiquidM.
+
+## Specs
+
+- [Reporting OpenAPI](openapi/liquid-m-reporting-openapi.yml): OpenAPI 3.0.3 generated from LiquidM's published Reporting API README.
+- [Management OpenAPI](openapi/liquid-m-management-openapi.yml): OpenAPI 3.0.3 generated from LiquidM's MIT-licensed first-party JavaScript client.
+- [Reporting Overlay](overlays/liquid-m-reporting-overlay.yaml)
+- [Management Overlay](overlays/liquid-m-management-overlay.yaml)
+
+## Docs
+
+- [Reporting API README](https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md): The authoritative Reporting API reference — parameters, all dimensions, all metrics, response format and return codes.
+- [Management API client source](https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js): The authoritative Management API reference, since no prose docs exist.
+- [LiquidM on GitHub](https://github.com/liquidm): 100-repo public organization.
+
+## Reference artifacts
+
+- [Vocabulary](vocabulary/liquid-m-vocabulary.yml): 30 reporting dimensions and 22 metrics with LiquidM's own definitions.
+- [Conventions](conventions/liquid-m-conventions.yml): Auth style, filtering syntax, versioning, error envelope, value representation.
+- [Authentication](authentication/liquid-m-authentication.yml): Single AUTH_TOKEN as a query parameter.
+- [Error catalog](errors/liquid-m-problem-types.yml): HTTP-status-only signalling plus ad section validation errors.
+- [Data model](data-model/liquid-m-data-model.yml): Account, Campaign, Budget, Ad and the four ad sections.
+- [Lifecycle](lifecycle/liquid-m-lifecycle.yml): URI-path versioning, v1 and v2 prefixes, no deprecation policy or status page.
+- [Conformance](conformance/liquid-m-conformance.yml): OpenRTB 2.5, IAB taxonomies, ISO 4217, ISO 8601.
+- [Packages](packages/liquid-m-packages.yml): Two first-party API clients, neither published to a registry.
+- [Agent skills](skills/_index.yml): Run a Visual Report; launch a campaign.
+- [MCP candidate](mcp/liquid-m-mcp.yml): Six-tool candidate surface derived from the specs. No LiquidM-hosted MCP server exists.
+
+## Things agents should know
+
+- Authentication is a single long-lived AUTH_TOKEN passed as a **query
+  parameter**. Issuing a new token invalidates the previous one for every other
+  consumer, so reuse an existing token rather than minting one.
+- **There is no idempotency contract.** No write operation accepts an idempotency
+  key. Never blindly retry a create — list first to check whether it succeeded.
+- Reporting cells carry both `value` and `formatted_value`. `formatted_value` is
+  persistent; `value` may change unit representation (microcents to cents).
+- Errors are HTTP status codes only. There is no problem+json envelope, no error
+  code registry, and no documented rate limits.
+- A `200` from ad creation does not mean the ad can deliver — check `meta.errors`,
+  `delivery_errors` and `delivery_warnings`.

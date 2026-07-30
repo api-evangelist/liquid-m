@@ -1,0 +1,250 @@
+openapi: 3.0.3
+info:
+  title: LiquidM Reporting API
+  version: '1.0'
+  description: >-
+    The LiquidM Reporting API provides access to the reporting data that is also
+    available via the reporting user interface in the LiquidM demand-side
+    platform. Reports are requested as a single HTTP GET against
+    /visual_reports.json with an auth token, a date range, a granularity, and
+    comma-separated lists of dimensions, filters and metrics. The response is a
+    JSON document containing the requested dimensions, a column descriptor list,
+    and a row list where every cell carries both a machine value and a
+    human-readable formatted_value.
+  contact:
+    name: LiquidM open source
+    email: opensource@liquidm.com
+    url: https://github.com/liquidm
+  x-apievangelist-provenance:
+    generated: '2026-07-19'
+    method: generated
+    source: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+    note: >-
+      Generated faithfully from LiquidM's own published Reporting API README and
+      the first-party Ruby client source. No endpoint, parameter, enum value or
+      response field here is invented; every item is documented in that README.
+servers:
+  - url: https://platform.liquidm.com
+    description: LiquidM platform (production)
+tags:
+  - name: Authentication
+    description: Auth token issuance for the Reporting API.
+  - name: Reporting
+    description: Visual report queries across dimensions and metrics.
+paths:
+  /api/auth:
+    get:
+      operationId: createAuthToken
+      tags:
+        - Authentication
+      summary: Issue a Reporting API auth token
+      description: >-
+        Exchange LiquidM platform login credentials for an AUTH_TOKEN used on all
+        subsequent Reporting API requests. Requesting a new token invalidates the
+        previous one.
+      parameters:
+        - name: email
+          in: query
+          required: true
+          description: LiquidM platform login email.
+          schema:
+            type: string
+            format: email
+        - name: password
+          in: query
+          required: true
+          description: LiquidM platform login password.
+          schema:
+            type: string
+            format: password
+        - name: api
+          in: query
+          required: true
+          description: Must be true to request an API token.
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: An auth token was issued.
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Authentication failed.
+  /visual_reports.json:
+    get:
+      operationId: getVisualReport
+      tags:
+        - Reporting
+      summary: Run a visual report
+      description: >-
+        Return reporting data aggregated by the requested granularity, split by
+        the requested dimensions, narrowed by the requested filters, and
+        containing the requested metrics.
+      parameters:
+        - name: auth_token
+          in: query
+          required: true
+          description: The AUTH_TOKEN issued by /api/auth.
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: false
+          description: Start date for the report. Defaults to seven days ago.
+          schema:
+            type: string
+            format: date
+          example: '2017-07-01'
+        - name: end_date
+          in: query
+          required: false
+          description: End date for the report. Defaults to today.
+          schema:
+            type: string
+            format: date
+          example: '2017-12-31'
+        - name: granularity
+          in: query
+          required: false
+          description: Aggregation granularity for the report.
+          schema:
+            type: string
+            enum: [all, day, hour]
+            default: all
+        - name: currency
+          in: query
+          required: false
+          description: ISO 4217 currency code. All ISO 4217 currencies are supported.
+          schema:
+            type: string
+            default: EUR
+          example: USD
+        - name: time_zone
+          in: query
+          required: false
+          description: >-
+            Rails TimeZone constant. Any timezone with a whole-hour offset to UTC
+            is accepted; 30-minute offsets are not supported. Defaults to the
+            user's default in the LiquidM platform.
+          schema:
+            type: string
+          example: UTC
+        - name: dimensions
+          in: query
+          required: false
+          description: Comma-separated dimensions to split the result by.
+          schema:
+            type: string
+          example: country,campaign
+        - name: filters
+          in: query
+          required: false
+          description: >-
+            Comma-separated filters in <dimension>-<value> form. Every dimension
+            is also available as a filter.
+          schema:
+            type: string
+          example: campaign-99999
+        - name: metrics
+          in: query
+          required: false
+          description: Comma-separated metrics to report.
+          schema:
+            type: string
+            default: ais,cost
+          example: bids,ais,clicks
+      responses:
+        '200':
+          description: The report.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisualReport'
+              example:
+                columns:
+                  - id: country
+                    name: Country
+                  - id: ais
+                    name: AIs
+                  - id: clicks
+                    name: Clicks
+                dimensions:
+                  - country
+                rows:
+                  - ais:
+                      formatted_value: '81'
+                      value: 81
+                    clicks:
+                      formatted_value: '1'
+                      value: 1
+                    country:
+                      name: COUNTRY1
+                      value: 98
+        '401':
+          description: Authentication was wrong.
+components:
+  securitySchemes:
+    authToken:
+      type: apiKey
+      in: query
+      name: auth_token
+      description: >-
+        AUTH_TOKEN issued by GET /api/auth, passed as a query parameter on every
+        request.
+  schemas:
+    VisualReport:
+      type: object
+      description: >-
+        A report response. Every attribute's value is always an array.
+      properties:
+        dimensions:
+          type: array
+          description: The dimensions list used for this report.
+          items:
+            type: string
+        columns:
+          type: array
+          description: The reported columns, each with an id and a name.
+          items:
+            $ref: '#/components/schemas/ReportColumn'
+        rows:
+          type: array
+          description: >-
+            One flat row list (never nested, even with dimensions specified).
+            Each row maps a column id to a value pair.
+          items:
+            $ref: '#/components/schemas/ReportRow'
+    ReportColumn:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Column identifier, matching a dimension or metric id.
+        name:
+          type: string
+          description: Human-readable column name as shown in Visual Reports.
+    ReportRow:
+      type: object
+      description: >-
+        Map of column id to a cell. Metric cells carry value and formatted_value;
+        entity cells (such as country) carry value and name. formatted_value is
+        persistent while value may change representation (for example microcents
+        to cents).
+      additionalProperties:
+        $ref: '#/components/schemas/ReportCell'
+    ReportCell:
+      type: object
+      properties:
+        value:
+          description: Internal representation of the value.
+        formatted_value:
+          type: string
+          description: Human-readable representation. Persistent across changes to value.
+        name:
+          type: string
+          description: Present instead of formatted_value when the cell is an entity.
+security:
+  - authToken: []

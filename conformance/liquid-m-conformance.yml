@@ -1,0 +1,69 @@
+generated: '2026-07-19'
+method: derived
+source: >-
+  openapi/liquid-m-reporting-openapi.yml, openapi/liquid-m-management-openapi.yml,
+  vocabulary/liquid-m-vocabulary.yml,
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+note: >-
+  Derived from LiquidM's published documentation and its own vocabulary. LiquidM
+  publishes no certifications or compliance program, so no Compliance pointer is
+  emitted.
+standards:
+- id: openrtb-2.5
+  conforms: true
+  evidence: >-
+    The Reporting API README directs consumers to the IAB OpenRTB API
+    Specification Version 2.5 for the standards its reporting refers to, and the
+    metric set (bid_requests, bids, win_rate) is OpenRTB auction vocabulary.
+  reference: https://www.iab.com/wp-content/uploads/2016/03/OpenRTB-API-Specification-Version-2-5-FINAL.pdf
+- id: iab-content-taxonomy
+  conforms: true
+  evidence: >-
+    The category dimension splits by IAB category and campaigns carry a
+    category_id.
+- id: iab-device-type
+  conforms: true
+  evidence: The devicetype dimension splits by IAB device type.
+- id: iso-4217
+  conforms: true
+  evidence: >-
+    The currency parameter accepts ISO 4217 currency codes; all currencies
+    defined by ISO 4217 are supported. Campaigns carry an ISO 4217 currency.
+- id: iso-8601
+  conforms: true
+  evidence: >-
+    Reporting start_date/end_date are date strings; budget start_date/end_date
+    are ISO 8601 date-times produced by the first-party client.
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No oauth2 security scheme. Authentication is a single long-lived auth_token
+    passed as a query parameter.
+- id: openid-connect
+  conforms: false
+  evidence: No OIDC discovery document is served; the well-known probe found only SPA soft-404s.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are signalled by HTTP status code only. No application/problem+json
+    responses are documented.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset or Deprecation header support is documented.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: No security.txt is served on platform.liquidm.com or liquidm.com.
+- id: json-api
+  conforms: false
+  evidence: >-
+    Responses use bespoke envelopes (columns/dimensions/rows for reporting, a
+    named resource key for management), not the JSON:API media type.
+- id: rest-uri-versioning
+  conforms: true
+  evidence: Management API paths are prefixed /api/v1/ and /api/v2/.
+compliance_program:
+  published: false
+  certifications: []
+  note: >-
+    No trust center, compliance page or named certification (SOC 2, ISO 27001,
+    PCI DSS, HIPAA, FedRAMP) was found for liquidm.com or platform.liquidm.com.

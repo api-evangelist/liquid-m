@@ -1,0 +1,21 @@
+generated: '2026-07-19'
+method: generated
+source: >-
+  Grounded in operationIds defined in openapi/liquid-m-reporting-openapi.yml and
+  openapi/liquid-m-management-openapi.yml, with conventions and error handling
+  from conventions/liquid-m-conventions.yml and errors/liquid-m-problem-types.yml.
+skills:
+- file: liquid-m-run-visual-report.md
+  name: Run a LiquidM Visual Report
+  description: >-
+    Authenticate and pull programmatic advertising performance data from the
+    Reporting API across LiquidM's dimension and metric vocabulary.
+  api: openapi/liquid-m-reporting-openapi.yml
+  operations: [createAuthToken, getVisualReport]
+- file: liquid-m-launch-campaign.md
+  name: Launch a LiquidM campaign
+  description: >-
+    Create a budget, campaign and ad in the correct order, then verify the ad can
+    actually deliver.
+  api: openapi/liquid-m-management-openapi.yml
+  operations: [createBudget, createCampaign, createAd, listCampaigns, listAds]

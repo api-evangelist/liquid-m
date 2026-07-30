@@ -1,0 +1,362 @@
+openapi: 3.0.3
+info:
+  title: LiquidM Management API
+  version: 'v1'
+  description: >-
+    Campaign management API for the LiquidM demand-side platform. The API is
+    organised around campaigns, budgets and ads: a campaign carries currency,
+    unit type, pacing timezone and IAB category; one or more budgets carry the
+    pacing and spend caps; ads bind creative, supply, targeting and setting
+    sections to a campaign. LiquidM publishes an MIT-licensed first-party
+    JavaScript client (lqmapi.js) that exercises this surface, including a dry-run
+    mode that emulates create responses without writing.
+  contact:
+    name: LiquidM open source
+    email: opensource@liquidm.com
+    url: https://github.com/liquidm
+  license:
+    name: MIT
+    url: https://github.com/liquidm/liquidm-management-api/blob/master/LICENSE
+  x-apievangelist-provenance:
+    generated: '2026-07-19'
+    method: generated
+    source: https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+    note: >-
+      Generated faithfully from LiquidM's own MIT-licensed first-party JavaScript
+      client. Every path, method, parameter, request body wrapper and response
+      field is taken verbatim from that client's request builders and its dry-run
+      response emulators. Nothing is invented. LiquidM's own README marks this API
+      "Under development"; treat the surface as partial.
+servers:
+  - url: https://platform.liquidm.com/api/v1
+    description: LiquidM Management API v1
+  - url: https://platform.liquidm.com/api/v2
+    description: >-
+      LiquidM Management API v2 prefix, declared by the first-party client. No
+      v2 operations are exercised by the published client.
+tags:
+  - name: Campaigns
+  - name: Budgets
+  - name: Ads
+paths:
+  /campaigns:
+    get:
+      operationId: listCampaigns
+      tags:
+        - Campaigns
+      summary: List campaigns for an account
+      parameters:
+        - name: account_id
+          in: query
+          required: true
+          description: LiquidM account id.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Campaign list.
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Authentication failed.
+    post:
+      operationId: createCampaign
+      tags:
+        - Campaigns
+      summary: Create a campaign
+      description: >-
+        Creates a campaign. The first-party client creates a budget first and
+        passes the resulting budget id in budget_ids.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [campaign]
+              properties:
+                campaign:
+                  $ref: '#/components/schemas/Campaign'
+      responses:
+        '200':
+          description: The created campaign.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  campaign:
+                    $ref: '#/components/schemas/Campaign'
+        '401':
+          description: Authentication failed.
+  /budgets:
+    post:
+      operationId: createBudget
+      tags:
+        - Budgets
+      summary: Create a budget
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [budget]
+              properties:
+                budget:
+                  $ref: '#/components/schemas/Budget'
+      responses:
+        '200':
+          description: The created budget.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  budget:
+                    $ref: '#/components/schemas/Budget'
+        '401':
+          description: Authentication failed.
+  /ads:
+    get:
+      operationId: listAds
+      tags:
+        - Ads
+      summary: List ads for a campaign
+      parameters:
+        - name: campaign_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: embed
+          in: query
+          required: false
+          description: Comma-separated list of associations to embed in the response.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ad list.
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: Authentication failed.
+    post:
+      operationId: createAd
+      tags:
+        - Ads
+      summary: Create an ad
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [ad]
+              properties:
+                ad:
+                  $ref: '#/components/schemas/Ad'
+      responses:
+        '200':
+          description: >-
+            The created ad. A meta.errors object reports which ad sections are
+            not yet valid, and delivery_warnings / delivery_errors report why the
+            ad cannot deliver.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ad:
+                    $ref: '#/components/schemas/Ad'
+                  meta:
+                    $ref: '#/components/schemas/AdMeta'
+        '401':
+          description: Authentication failed.
+components:
+  securitySchemes:
+    authToken:
+      type: apiKey
+      in: query
+      name: auth_token
+      description: >-
+        AUTH_TOKEN passed as a query parameter on every request, including POSTs.
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        unit_type:
+          type: string
+          example: cpm
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+        advertiser_domain:
+          type: string
+        price_optimization_enabled:
+          type: boolean
+        timezone:
+          type: string
+          example: Berlin
+        account_id:
+          type: integer
+        category_id:
+          type: integer
+          description: IAB category id.
+        budget_ids:
+          type: array
+          items:
+            type: integer
+        ad_ids:
+          type: array
+          items:
+            type: integer
+        decision_interface:
+          type: string
+          example: bidopt
+        additional_name:
+          type: string
+          nullable: true
+        campaign_info:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    Budget:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        unit_price_cents:
+          type: integer
+        overall_cents:
+          type: integer
+          nullable: true
+        overall_units:
+          type: integer
+          nullable: true
+        daily_cents:
+          type: integer
+          nullable: true
+        daily_units:
+          type: integer
+          nullable: true
+        overall_units_pacing:
+          type: string
+          example: optimized
+        overall_cents_pacing:
+          type: string
+          example: optimized
+        daily_units_pacing:
+          type: string
+          example: optimized
+        daily_cents_pacing:
+          type: string
+          example: optimized
+        campaign_id:
+          type: integer
+          nullable: true
+        budget_touched:
+          type: boolean
+          readOnly: true
+    Ad:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        state:
+          type: string
+          example: incomplete
+        approved:
+          type: boolean
+          nullable: true
+        campaign_id:
+          type: integer
+        overall_units:
+          type: integer
+          nullable: true
+        daily_units:
+          type: integer
+          nullable: true
+        section_order:
+          type: array
+          items:
+            type: string
+          example: [Targeting, Supply, Creative, Setting]
+        creative_id:
+          type: integer
+        creative_section_id:
+          type: integer
+          nullable: true
+        creative_section_type:
+          type: string
+          nullable: true
+        supply_id:
+          type: integer
+        supply_section_id:
+          type: integer
+          nullable: true
+        targeting_id:
+          type: integer
+        setting_id:
+          type: integer
+        delivery_warnings:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        delivery_errors:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        appnexus_approval_info:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    AdMeta:
+      type: object
+      properties:
+        errors:
+          type: object
+          description: Per-section validation errors.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+security:
+  - authToken: []
