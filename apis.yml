@@ -138,6 +138,10 @@ apis:
   - type: SourceCode
     url: https://github.com/liquidm/liquidm-management-api
 common:
+- type: Overlay
+  url: overlays/liquid-m-management-overlay.yaml
+- type: IssueTracker
+  url: https://github.com/liquidm/liquidm-reporting-api-client/issues
 - type: GitHubOrganization
   url: https://github.com/liquidm
 - type: Website
