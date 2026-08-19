@@ -19,9 +19,18 @@ packages:
   kind: sdk
   api: openapi/liquid-m-reporting-openapi.yml
   published_registry: false
+  version: null
+  published: null
+  version_source: none
+  last_commit: '2022-10-06'
   note: >-
     LiquidM describes this as an example client implementation for the Reporting
-    API. Exposes LiquidM::ReportingClient#query.
+    API. Exposes LiquidM::ReportingClient#query. version and published are null
+    because there is no registry to query — rubygems.org/api/v1/gems/liquidm-reporting-api-client.json
+    returns 404, and the Gemfile line in the README pins nothing: it is a bare
+    git: source with no ref, tag or branch, so `bundle install` floats to
+    whatever master happens to be. A consumer cannot state which version they
+    have, and neither can we. Last push to master was 2022-10-06.
 - language: javascript
   registry: github
   name: lqmapi.js
@@ -32,10 +41,19 @@ packages:
   kind: sdk
   api: openapi/liquid-m-management-openapi.yml
   published_registry: false
+  version: null
+  published: null
+  version_source: none
+  last_commit: '2019-04-30'
   note: >-
     First-party Management API client, copyright LiquidM Technology GmbH.
     Provides getCampaigns, getAds, createCampaign, createBudget, createAd plus a
-    dry-run mode.
+    dry-run mode. version and published are null because the distribution is a
+    single unversioned .js file in a git repository — no npm package, no CDN
+    build, no tag, no version constant in the source. There is nothing to pin and
+    nothing to compare. Last push to master was 2019-04-30, which predates the
+    live v2 API generation entirely: this client cannot speak to the current
+    surface.
 - language: ruby
   registry: rubygems
   name: liquid-ext
@@ -45,7 +63,28 @@ packages:
   license: MIT
   kind: utility
   version: 3.5.3
+  published: '2014-11-13'
+  version_source: https://rubygems.org/api/v1/versions/liquid-ext.json
+  downloads: 111894
   note: >-
     LiquidM ruby core extensions and helper libraries, authored by "LiquidM,
-    Inc.". Not an API client; catalogued as first-party published software.
+    Inc.". Not an API client; catalogued as first-party published software. This
+    is the only LiquidM package on any registry, and its latest release 3.5.3
+    dates to 2014-11-13 — nearly twelve years stale, and five years older than
+    the acquisition.
 official_sdk_count: 2
+currency:
+  method: probed
+  checked: '2026-08-13'
+  registries_queried:
+  - {registry: rubygems, endpoint: 'https://rubygems.org/api/v1/gems/liquid-ext.json', result: 200}
+  - {registry: rubygems, endpoint: 'https://rubygems.org/api/v1/gems/liquidm-reporting-api-client.json', result: 404}
+  - {registry: npm, endpoint: 'https://registry.npmjs.org/-/v1/search?text=liquidm', result: 'no LiquidM-authored package'}
+  finding: >-
+    Neither API client is versioned, dated or installable from a registry. Both
+    are floating git checkouts, so there is no published release date against
+    which to measure decay, and no way for a consumer to pin a known-good build.
+    The one package that IS registry-published, liquid-ext, is not an API client
+    and last shipped in 2014. Measured against the live API — which now runs a v2
+    generation with a JSON:API media type that no published client speaks —
+    LiquidM's entire client surface is behind its own API.

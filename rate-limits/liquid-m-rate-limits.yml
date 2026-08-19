@@ -1,0 +1,62 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  Live unauthenticated responses from https://platform.liquidm.com/api/v1/*,
+  https://platform.liquidm.com/api/v2/* and
+  https://platform.liquidm.com/visual_reports.json on 2026-08-13, plus
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+limit_count: 0
+published: false
+note: >-
+  LiquidM documents no rate limit, quota, burst allowance or throttling policy for
+  either API, and none is observable at the edge. Roughly sixty unauthenticated
+  requests were issued across the v1, v2 and reporting surfaces during this pass
+  and every one was answered on its merits — 401 or 404, never 429 — with no
+  backoff, challenge or delay. An agent integrating LiquidM therefore has no
+  runtime signal to pace against and no documented ceiling to design for; it must
+  fall back to conservative client-side pacing and treat any future 429 as
+  undocumented behaviour. Recorded as a measured zero.
+limits: []
+response_headers:
+  rate_limit_headers_present: false
+  probed_for:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  - RateLimit-Policy
+  - Retry-After
+  observed_on_every_response:
+  - header: x-request-id
+    example: 4acb41d6-6d11-4ed7-b68d-1c56b950a10d
+    note: >-
+      Per-request correlation id. Not a rate-limit signal, but it is the only
+      runtime observability header the platform emits and is the value to quote
+      when reporting a problem.
+  - header: x-runtime
+    example: '0.004443'
+    note: Server-side processing seconds, emitted by the Rails stack.
+  - header: cache-control
+    example: no-cache
+  server: nginx/1.17.8
+exhaustion:
+  status_code: null
+  observed: false
+  note: >-
+    No 429 was returned during the pass, so the exhaustion status code, its body
+    shape and any Retry-After semantics are unknown rather than absent.
+evidence:
+- url: https://platform.liquidm.com/api/v1/campaigns
+  status: 401
+  detail: 'Body {"error":"No auth token provided"}; no rate-limit headers on the response.'
+- url: https://platform.liquidm.com/api/v2/campaigns
+  status: 401
+  detail: >-
+    Body is a JSON:API error document with content-type application/vnd.api+json;
+    no rate-limit headers on the response.
+- url: https://platform.liquidm.com/visual_reports.json
+  status: 401
+  detail: 'Body {}; no rate-limit headers on the response.'
+checked: '2026-08-13'

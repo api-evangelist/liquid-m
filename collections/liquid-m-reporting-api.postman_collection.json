@@ -1,0 +1,285 @@
+{
+  "item": [
+    {
+      "id": "29223bb1-2c66-407c-96e9-79c6292bd280",
+      "name": "Reporting",
+      "description": {
+        "content": "Visual report queries across dimensions and metrics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9ae95bc3-3379-4cd7-ab66-6d2a18ef8323",
+          "name": "Run a visual report",
+          "request": {
+            "name": "Run a visual report",
+            "description": {
+              "content": "Return reporting data aggregated by the requested granularity, split by the requested dimensions, narrowed by the requested filters, and containing the requested metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "visual_reports.json"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "auth_token",
+                  "value": "<string>",
+                  "description": "(Required) The AUTH_TOKEN issued by /api/auth."
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start date for the report. Defaults to seven days ago."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End date for the report. Defaults to today."
+                },
+                {
+                  "disabled": false,
+                  "key": "granularity",
+                  "value": "all",
+                  "description": "Aggregation granularity for the report."
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "EUR",
+                  "description": "ISO 4217 currency code. All ISO 4217 currencies are supported."
+                },
+                {
+                  "disabled": false,
+                  "key": "time_zone",
+                  "value": "<string>",
+                  "description": "Rails TimeZone constant. Any timezone with a whole-hour offset to UTC is accepted; 30-minute offsets are not supported. Defaults to the user's default in the LiquidM platform."
+                },
+                {
+                  "disabled": false,
+                  "key": "dimensions",
+                  "value": "<string>",
+                  "description": "Comma-separated dimensions to split the result by."
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "Comma-separated filters in <dimension>-<value> form. Every dimension is also available as a filter."
+                },
+                {
+                  "disabled": false,
+                  "key": "metrics",
+                  "value": "ais,cost",
+                  "description": "Comma-separated metrics to report."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a3524dc3-61f9-454f-b50f-39209a7cf9c7",
+              "name": "The report.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "visual_reports.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "auth_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2017-07-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2017-12-31"
+                    },
+                    {
+                      "key": "granularity",
+                      "value": "all"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "USD"
+                    },
+                    {
+                      "key": "time_zone",
+                      "value": "UTC"
+                    },
+                    {
+                      "key": "dimensions",
+                      "value": "country,campaign"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "campaign-99999"
+                    },
+                    {
+                      "key": "metrics",
+                      "value": "bids,ais,clicks"
+                    },
+                    {
+                      "key": "auth_token",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"columns\": [\n    {\n      \"id\": \"country\",\n      \"name\": \"Country\"\n    },\n    {\n      \"id\": \"ais\",\n      \"name\": \"AIs\"\n    },\n    {\n      \"id\": \"clicks\",\n      \"name\": \"Clicks\"\n    }\n  ],\n  \"dimensions\": [\n    \"country\"\n  ],\n  \"rows\": [\n    {\n      \"ais\": {\n        \"formatted_value\": \"81\",\n        \"value\": 81\n      },\n      \"clicks\": {\n        \"formatted_value\": \"1\",\n        \"value\": 1\n      },\n      \"country\": {\n        \"name\": \"COUNTRY1\",\n        \"value\": 98\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab3f347a-4b70-49b5-9856-b908d7722af8",
+              "name": "Authentication was wrong.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "visual_reports.json"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "auth_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2017-07-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2017-12-31"
+                    },
+                    {
+                      "key": "granularity",
+                      "value": "all"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "USD"
+                    },
+                    {
+                      "key": "time_zone",
+                      "value": "UTC"
+                    },
+                    {
+                      "key": "dimensions",
+                      "value": "country,campaign"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "campaign-99999"
+                    },
+                    {
+                      "key": "metrics",
+                      "value": "bids,ais,clicks"
+                    },
+                    {
+                      "key": "auth_token",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://platform.liquidm.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "auth_token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "fb50c856-b81d-4199-aa98-824ca206a892",
+    "name": "LiquidM Management Ads Reporting API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.\n\nContact Support:\n Name: LiquidM open source\n Email: opensource@liquidm.com",
+      "type": "text/plain"
+    }
+  }
+}

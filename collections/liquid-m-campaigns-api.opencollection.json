@@ -1,0 +1,65 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LiquidM Management Ads Campaigns API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "auth_token",
+      "value": "{{auth_token}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List campaigns for an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://platform.liquidm.com/api/v1/campaigns",
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "query",
+                "description": "LiquidM account id."
+              }
+            ]
+          },
+          "docs": "List campaigns for an account"
+        },
+        {
+          "info": {
+            "name": "Create a campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://platform.liquidm.com/api/v1/campaigns",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "campaign",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Creates a campaign. The first-party client creates a budget first and passes the resulting budget id in budget_ids."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

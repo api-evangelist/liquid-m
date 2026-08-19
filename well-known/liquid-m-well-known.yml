@@ -1,44 +1,59 @@
-generated: '2026-07-19'
-method: searched
-source: live probes of https://platform.liquidm.com and https://liquidm.com
+generated: '2026-08-13'
+method: probed
+source: live probes of https://platform.liquidm.com and liquidm.com
+documents_found: 0
+pointer_emitted: false
 note: >-
-  platform.liquidm.com is an Ember single-page application whose server returns
-  the SPA shell with HTTP 200 for unmatched paths. Every /.well-known/ probe
-  therefore returned 200 with an HTML body rather than the expected document, so
-  each is recorded as a soft 404 (soft_404: true). No real well-known discovery
-  document is published. liquidm.com 301-redirects to Equativ.
+  LiquidM serves no /.well-known/ discovery document of any kind, on either host.
+
+  platform.liquidm.com is an Ember single-page application fronted by nginx, and
+  its server answers EVERY unmatched path with the same SPA shell under HTTP 200.
+  All eight probes below returned byte-identical bodies — 7748 bytes of
+  text/html, the same ETag as the site root — so each 200 is a soft 404 and not a
+  document. This was re-confirmed on 2026-08-13 by comparing content-length and
+  content-type across every path; the identical size across unrelated paths is
+  the proof. No WellKnown, SecurityTxt, APICatalog or AgentCard pointer is
+  emitted in apis.yml, because a pointer would assert that LiquidM publishes a
+  surface it does not. A WellKnown pointer written on an earlier round has been
+  removed for this reason.
+
+  liquidm.com no longer completes a TLS handshake at all — its certificate
+  expired on 2026-07-20 — so every https probe of that host fails at the
+  connection layer. Over plain HTTP it 301-redirects to Equativ for every path,
+  including /.well-known/*.
+soft_404_signature:
+  content_length: 7748
+  content_type: text/html
+  detail: >-
+    Identical body returned for the site root and for every /.well-known/ path
+    probed. Genuine misses on this platform look different: the Rails API under
+    /api/v1/ returns a real JSON 404 ({"error":"No Route Matches"}), which is how
+    the API surface probe in lifecycle/liquid-m-lifecycle.yml was able to
+    distinguish live routes from absent ones.
 hosts:
 - host: https://platform.liquidm.com
+  reachable: true
   documents:
-  - path: /.well-known/security.txt
-    status: 200
-    soft_404: true
-    content_type: text/html
-    found: false
-  - path: /.well-known/openid-configuration
-    status: 200
-    soft_404: true
-    content_type: text/html
-    found: false
-  - path: /.well-known/oauth-authorization-server
-    status: 200
-    soft_404: true
-    content_type: text/html
-    found: false
-  - path: /.well-known/api-catalog
-    status: 200
-    soft_404: true
-    content_type: text/html
-    found: false
-  - path: /.well-known/ai-plugin.json
-    status: 200
-    soft_404: true
-    content_type: text/html
-    found: false
+  - {path: /.well-known/security.txt, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/openid-configuration, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/oauth-authorization-server, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/oauth-protected-resource, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/api-catalog, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/ai-plugin.json, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/agent-card.json, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
+  - {path: /.well-known/agent.json, status: 200, soft_404: true, content_type: text/html, bytes: 7748, found: false}
 - host: https://liquidm.com
-  note: 301 redirect to https://www.equativ.com/advertisers for all paths
+  reachable: false
+  note: >-
+    TLS certificate expired 2026-07-20; the handshake is aborted, so no HTTP
+    status is returned. curl reports exit 60 / status 000.
   documents:
-  - path: /.well-known/security.txt
-    status: 301
-    found: false
-documents_found: 0
+  - {path: /.well-known/security.txt, status: 000, found: false}
+  - {path: /.well-known/agent-card.json, status: 000, found: false}
+- host: http://liquidm.com
+  reachable: true
+  note: 301 redirect to https://www.equativ.com/advertisers for every path.
+  documents:
+  - {path: /.well-known/security.txt, status: 301, found: false}
+  - {path: /.well-known/agent-card.json, status: 301, found: false}
+checked: '2026-08-13'

@@ -1,13 +1,17 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: derived
 source: >-
   openapi/liquid-m-reporting-openapi.yml, openapi/liquid-m-management-openapi.yml,
   vocabulary/liquid-m-vocabulary.yml,
-  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md,
+  live unauthenticated probes of platform.liquidm.com on 2026-08-13
 note: >-
-  Derived from LiquidM's published documentation and its own vocabulary. LiquidM
-  publishes no certifications or compliance program, so no Compliance pointer is
-  emitted.
+  Derived from LiquidM's published documentation and its own vocabulary, with the
+  json-api entry corrected against live observation on 2026-08-13. LiquidM
+  publishes no certifications and runs no compliance program — no SOC 2, ISO
+  27001, PCI DSS, HIPAA or FedRAMP claim appears anywhere, and the security
+  programme probe found neither a vulnerability-disclosure policy nor a trust
+  centre — so no Compliance pointer is emitted.
 standards:
 - id: openrtb-2.5
   conforms: true
@@ -54,10 +58,30 @@ standards:
   conforms: false
   evidence: No security.txt is served on platform.liquidm.com or liquidm.com.
 - id: json-api
-  conforms: false
+  conforms: partial
+  method: probed
+  observed: '2026-08-13'
   evidence: >-
-    Responses use bespoke envelopes (columns/dimensions/rows for reporting, a
-    named resource key for management), not the JSON:API media type.
+    Corrected from conforms:false after live probing. The surface is split. The
+    documented v1 Management API and the Reporting API do NOT use JSON:API —
+    they return bespoke envelopes (columns/dimensions/rows for reporting, a named
+    resource key for management) under application/json. But the undocumented v2
+    Management API does: every request to /api/v2/* answers with content-type
+    application/vnd.api+json and a JSON:API error document of the form
+    {"errors":[{"title":"Authentication error","detail":"No auth token
+    provided","status":401}]}. LiquidM also maintains a public fork of
+    jsonapi-utils, the Rails JSON:API serialization gem, in its own GitHub
+    organization, which corroborates the media type as a deliberate choice
+    rather than an artifact of a proxy.
+  scope: /api/v2/* only
+  limitation: >-
+    Only the error document could be observed; success payloads require
+    credentials. Whether v2 also implements JSON:API's data/included/relationships
+    document structure, sparse fieldsets, compound documents or its pagination
+    profile is unverified, and LiquidM publishes no v2 documentation to check
+    against. Graded partial rather than true for that reason.
+  reference: https://jsonapi.org/format/
+  corroboration: https://github.com/liquidm/jsonapi-utils
 - id: rest-uri-versioning
   conforms: true
   evidence: Management API paths are prefixed /api/v1/ and /api/v2/.

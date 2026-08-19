@@ -1,11 +1,15 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 source: >-
   https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md,
-  https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
+  https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js,
+  live unauthenticated probes of platform.liquidm.com on 2026-08-13
 description: >-
   Cross-cutting request and response semantics for the LiquidM platform APIs,
-  captured from LiquidM's own published documentation and first-party clients.
+  captured from LiquidM's own published documentation and first-party clients,
+  then corrected against what the live platform actually returns. Where the two
+  disagree the observation wins and is marked method: probed — request tracing
+  and the v2 error envelope are both real behaviours LiquidM never documented.
 authentication:
   style: api-key
   location: query
@@ -50,8 +54,21 @@ expansion:
   applies_to: GET /api/v1/ads
   syntax: comma-separated list of associations
 request_tracing:
-  supported: false
-  note: No request-id or correlation header is documented.
+  supported: true
+  documented: false
+  method: probed
+  observed: '2026-08-13'
+  header: x-request-id
+  example: 4acb41d6-6d11-4ed7-b68d-1c56b950a10d
+  format: UUID v4
+  note: >-
+    Upgraded from "not supported" after live probing. LiquidM documents no
+    correlation header, but every response from platform.liquidm.com — v1, v2 and
+    the reporting endpoint alike — carries an x-request-id UUID, emitted by the
+    Rails stack. It is undocumented but real and usable: it is the value to quote
+    when reporting a problem, and the only per-request identifier the platform
+    offers. A companion x-runtime header reports server-side processing seconds.
+  companion_header: x-runtime
 versioning:
   scheme: uri-path
   current: v1
@@ -66,6 +83,31 @@ error_envelope:
     LiquidM states the API uses HTTP return codes: 200 on success, and other
     codes such as 401 when authentication was wrong. No structured error body,
     error code registry or RFC 9457 problem+json envelope is documented.
+  observed_shapes:
+    method: probed
+    observed: '2026-08-13'
+    note: >-
+      The envelope is not uniform across the platform. Three different shapes
+      were observed on unauthenticated requests, and an integrator must handle
+      all three.
+    shapes:
+    - surface: /api/v1/*
+      content_type: application/json; charset=utf-8
+      shape: '{"error": "<string>"}'
+      examples: ['{"error":"No auth token provided"}', '{"error":"No Route Matches"}', '{"error":"credentials-invalid"}']
+    - surface: /api/v2/*
+      content_type: application/vnd.api+json
+      shape: '{"errors": [{"title": "<string>", "detail": "<string>", "status": <int>}]}'
+      examples: ['{"errors":[{"title":"Authentication error","detail":"No auth token provided","status":401}]}']
+      note: >-
+        This is a JSON:API error document, media type and all — a materially
+        better error contract than v1, and entirely undocumented.
+    - surface: /visual_reports.json
+      content_type: application/json; charset=utf-8
+      shape: '{}'
+      note: >-
+        The reporting endpoint returns an empty JSON object on 401 with no
+        message at all, so the status code is the only diagnostic available.
   validation_errors: >-
     Ad creation returns a meta.errors object keyed by ad section (creative,
     setting, targeting) with an array of messages per section, alongside
@@ -73,7 +115,34 @@ error_envelope:
   artifact: errors/liquid-m-problem-types.yml
 rate_limiting:
   documented: false
-  note: No rate limits, quota headers or throttling behaviour are documented.
+  observed: false
+  note: >-
+    No rate limits, quota headers or throttling behaviour are documented, and
+    none is emitted at the edge. Roughly sixty unauthenticated probes across v1,
+    v2 and the reporting endpoint on 2026-08-13 produced no 429, no Retry-After
+    and no RateLimit-* or X-RateLimit-* header.
+  artifact: rate-limits/liquid-m-rate-limits.yml
+transport_security_headers:
+  method: probed
+  observed: '2026-08-13'
+  note: >-
+    The Rails stack applies a conventional default security-header set on every
+    API response. Recorded because it is the only security posture LiquidM
+    expresses anywhere — there is no security.txt, no disclosure policy and no
+    trust centre.
+  headers:
+  - x-frame-options: SAMEORIGIN
+  - x-content-type-options: nosniff
+  - x-xss-protection: 1; mode=block
+  - x-download-options: noopen
+  - x-permitted-cross-domain-policies: none
+  - referrer-policy: strict-origin-when-cross-origin
+  hsts:
+    present: false
+    note: >-
+      platform.liquidm.com serves no Strict-Transport-Security header. See
+      security/liquid-m-domain-security.yml.
+  server: nginx/1.17.8
 content_negotiation:
   response_media_type: application/json
   request_media_type: application/x-www-form-urlencoded

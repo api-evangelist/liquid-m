@@ -1,6 +1,7 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: derived
-source: openapi/liquid-m-management-openapi.yml, openapi/liquid-m-reporting-openapi.yml
+source: openapi/liquid-m-ads-api-openapi.yml, openapi/liquid-m-authentication-api-openapi.yml,
+  openapi/liquid-m-budgets-api-openapi.yml, openapi/liquid-m-campaigns-api-openapi.yml, openapi/liquid-m-reporting-api-openapi.yml
 summary:
   types:
   - apiKey
@@ -13,5 +14,8 @@ schemes:
   parameter: auth_token
   description: AUTH_TOKEN passed as a query parameter on every request, including POSTs.
   sources:
-  - openapi/liquid-m-management-openapi.yml
-  - openapi/liquid-m-reporting-openapi.yml
+  - openapi/liquid-m-ads-api-openapi.yml
+  - openapi/liquid-m-authentication-api-openapi.yml
+  - openapi/liquid-m-budgets-api-openapi.yml
+  - openapi/liquid-m-campaigns-api-openapi.yml
+  - openapi/liquid-m-reporting-api-openapi.yml

@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LiquidM Management Ads Budgets API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "auth_token",
+      "value": "{{auth_token}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Budgets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a budget",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://platform.liquidm.com/api/v1/budgets",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "budget",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Create a budget"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

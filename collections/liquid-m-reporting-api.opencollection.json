@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LiquidM Management Ads Reporting API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "auth_token",
+      "value": "{{auth_token}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reporting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run a visual report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://platform.liquidm.com/api/v1/visual_reports.json",
+            "params": [
+              {
+                "name": "auth_token",
+                "value": "",
+                "type": "query",
+                "description": "The AUTH_TOKEN issued by /api/auth."
+              },
+              {
+                "name": "start_date",
+                "value": "2017-07-01",
+                "type": "query",
+                "description": "Start date for the report. Defaults to seven days ago."
+              },
+              {
+                "name": "end_date",
+                "value": "2017-12-31",
+                "type": "query",
+                "description": "End date for the report. Defaults to today."
+              },
+              {
+                "name": "granularity",
+                "value": "",
+                "type": "query",
+                "description": "Aggregation granularity for the report."
+              },
+              {
+                "name": "currency",
+                "value": "USD",
+                "type": "query",
+                "description": "ISO 4217 currency code. All ISO 4217 currencies are supported."
+              },
+              {
+                "name": "time_zone",
+                "value": "UTC",
+                "type": "query",
+                "description": "Rails TimeZone constant. Any timezone with a whole-hour offset to UTC is accepted; 30-minute offsets are not supported. Defaults to the user's default in the LiquidM platform."
+              },
+              {
+                "name": "dimensions",
+                "value": "country,campaign",
+                "type": "query",
+                "description": "Comma-separated dimensions to split the result by."
+              },
+              {
+                "name": "filters",
+                "value": "campaign-99999",
+                "type": "query",
+                "description": "Comma-separated filters in <dimension>-<value> form. Every dimension is also available as a filter."
+              },
+              {
+                "name": "metrics",
+                "value": "bids,ais,clicks",
+                "type": "query",
+                "description": "Comma-separated metrics to report."
+              }
+            ]
+          },
+          "docs": "Return reporting data aggregated by the requested granularity, split by the requested dimensions, narrowed by the requested filters, and containing the requested metrics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

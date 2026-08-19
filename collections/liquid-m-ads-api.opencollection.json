@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LiquidM Management Ads API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "auth_token",
+      "value": "{{auth_token}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List ads for a campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://platform.liquidm.com/api/v1/ads",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "embed",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of associations to embed in the response."
+              }
+            ]
+          },
+          "docs": "List ads for a campaign"
+        },
+        {
+          "info": {
+            "name": "Create an ad",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://platform.liquidm.com/api/v1/ads",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "ad",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Create an ad"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

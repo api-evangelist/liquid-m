@@ -1,9 +1,18 @@
-generated: '2026-07-19'
-method: derived
+generated: '2026-08-13'
+method: probed
 source: >-
   openapi/liquid-m-reporting-openapi.yml, openapi/liquid-m-management-openapi.yml,
-  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md,
+  live unauthenticated probes of platform.liquidm.com on 2026-08-13
 format: http-status
+envelopes:
+  note: >-
+    There is no single error envelope. Three coexist on one platform and an
+    integrator must handle all three. Full shapes in
+    conventions/liquid-m-conventions.yml#error_envelope.
+  v1: '{"error": "<string>"}  (application/json)'
+  v2: '{"errors": [{"title","detail","status"}]}  (application/vnd.api+json — a JSON:API error document)'
+  reporting: '{}  (application/json — empty, status code only)'
 note: >-
   LiquidM does not publish an error-code registry or an RFC 9457 problem+json
   envelope. Its documentation states only that the API uses HTTP return codes,
@@ -24,7 +33,45 @@ problems:
   source_operation: openapi/liquid-m-reporting-openapi.yml#getVisualReport
   observed: >-
     Live probe of https://platform.liquidm.com/visual_reports.json without a
-    token returned HTTP 401 on 2026-07-19.
+    token returned HTTP 401 on 2026-07-19; re-confirmed 2026-08-13. The body is
+    an empty JSON object, so the status code is the only diagnostic.
+- status: 401
+  title: No auth token provided
+  detail: >-
+    The auth_token query parameter was absent from a Management API request.
+    Distinct from an invalid token: this is the missing-parameter case.
+  remediation: Append auth_token=<AUTH_TOKEN> to the request.
+  source_operation: openapi/liquid-m-management-openapi.yml#listCampaigns
+  observed: >-
+    Live probe of https://platform.liquidm.com/api/v1/campaigns on 2026-08-13
+    returned HTTP 401 with body {"error":"No auth token provided"}.
+- status: 401
+  title: credentials-invalid
+  detail: >-
+    Token issuance was attempted with missing or wrong platform credentials.
+  remediation: >-
+    Supply valid email and password query parameters with api=true to
+    GET /api/auth.
+  source_operation: openapi/liquid-m-reporting-openapi.yml#createAuthToken
+  observed: >-
+    Live probe of https://platform.liquidm.com/api/auth without credentials on
+    2026-08-13 returned HTTP 401 with body {"error":"credentials-invalid"}.
+- status: 404
+  title: No Route Matches
+  detail: >-
+    The path is not routed under /api/v1/. Returned as JSON, not HTML, and
+    returned before authentication is evaluated.
+  remediation: Check the resource path against the Management API surface.
+  source_operation: openapi/liquid-m-management-openapi.yml
+  observed: >-
+    Live probe of https://platform.liquidm.com/api/v1/zzz_nonsense on 2026-08-13
+    returned HTTP 404 with body {"error":"No Route Matches"}.
+  note: >-
+    Because this 404 precedes the auth check on v1, route existence is
+    observable without credentials. See the surface_coverage block in
+    lifecycle/liquid-m-lifecycle.yml. The v2 prefix behaves the opposite way —
+    auth is evaluated first, so v2 returns 401 for unrouted paths and route
+    existence there cannot be probed.
 validation_errors:
   envelope: meta.errors
   applies_to: openapi/liquid-m-management-openapi.yml#createAd

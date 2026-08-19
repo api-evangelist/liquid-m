@@ -1,9 +1,10 @@
-generated: '2026-07-19'
-method: derived
+generated: '2026-08-13'
+method: searched
 source: >-
   openapi/liquid-m-management-openapi.yml,
   https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js,
-  live host probes
+  https://www.equativ.com/press/smart-acquires-dsp-liquidm,
+  live host and route probes of platform.liquidm.com on 2026-08-13
 versioning:
   scheme: uri-path
   current: v1
@@ -15,13 +16,33 @@ versioning:
     method against v1 only, so the v2 surface is undocumented. The Reporting API
     is unversioned: it is a single /visual_reports.json resource.
   docs: null
+  v2_status:
+    live: true
+    observed: '2026-08-13'
+    detail: >-
+      The v2 prefix is not a placeholder. It is served, it authenticates, and it
+      is a materially different API from v1: v2 answers with content-type
+      application/vnd.api+json and a JSON:API error document
+      ({"errors":[{"title","detail","status"}]}), where v1 answers with
+      application/json and a bare {"error":"..."} string. LiquidM publishes no
+      documentation, client or spec for v2, so its resources, payload shapes and
+      relationships are unknown. This is the single largest documentation gap on
+      the platform: a whole API generation exists in production with no public
+      contract.
+    caution: >-
+      v2 cannot be route-mapped from outside. Unlike v1, its authentication
+      filter runs BEFORE routing, so every path under /api/v2/ — including
+      deliberately nonsensical ones such as /api/v2/zzz_nonsense_resource —
+      returns 401 rather than 404. A 401 from v2 is therefore NOT evidence that a
+      resource exists, and no v2 resource names have been recorded from probing.
 deprecation:
   policy_url: null
   policy_published: false
   sunset_header: false
   note: >-
     No deprecation policy, sunset schedule or RFC 8594 Sunset/Deprecation header
-    support is documented or observable.
+    support is documented or observable. Notably, v1 has not been marked
+    deprecated even though a v2 exists in production alongside it.
 sla:
   url: null
   uptime_target: null
@@ -33,26 +54,127 @@ status_page:
   - {host: status.liquidm.com, result: NXDOMAIN}
   - {host: liquidm.statuspage.io, result: redirects to atlassian.com marketing page, hosted_page: false}
 deprecated_operations: []
+surface_coverage:
+  method: probed
+  observed: '2026-08-13'
+  summary: >-
+    LiquidM's published Management API client documents 3 collections. Live
+    probing of the v1 prefix confirms at least 15. Four-fifths of the documented
+    API generation is undocumented.
+  technique: >-
+    Under /api/v1/, unmatched paths return a real HTTP 404 with the JSON body
+    {"error":"No Route Matches"}, while matched paths return HTTP 401
+    {"error":"No auth token provided"}. That difference makes route existence
+    directly observable without credentials. Four negative controls
+    (zzz_nonsense, qqq_control_1, not_a_real_thing_9, xyzzy_control_2) all
+    returned 404, confirming the discrimination is real and not a blanket 401.
+  documented_collections: [campaigns, budgets, ads]
+  confirmed_live_collections:
+  - campaigns
+  - ads
+  - budgets
+  - creatives
+  - targetings
+  - settings
+  - supplies
+  - users
+  - accounts
+  - customers
+  - geo_targets
+  - countries
+  - categories
+  - devices
+  - languages
+  confirmed_count: 15
+  undocumented_count: 12
+  absent_collections_probed:
+  - deals
+  - audiences
+  - segments
+  - pixels
+  - conversions
+  - reports
+  - dashboards
+  - exchanges
+  - publishers
+  - inventories
+  - line_items
+  - assets
+  - bid_modifiers
+  - frequency_caps
+  - regions
+  - carriers
+  - browsers
+  - currencies
+  - timezones
+  - sites
+  - domains
+  caveat: >-
+    Route existence is all that was established. No operation, parameter,
+    request body or response shape has been inferred for the 12 undocumented
+    collections, and none has been written into openapi/. They are recorded here
+    as a measured coverage gap, not as an API description.
 maturity:
   reporting_api:
     state: documented
     evidence: >-
       Full parameter, dimension, metric and response documentation published in
-      the client README; live endpoint returned HTTP 401 (auth required) rather
-      than 404 on 2026-07-19.
+      the client README; live endpoint https://platform.liquidm.com/visual_reports.json
+      returned HTTP 401 (auth required) rather than 404, re-confirmed 2026-08-13.
     last_source_change: '2022-10-06'
   management_api:
     state: under-development
     evidence: >-
-      LiquidM's own README for liquidm-management-api reads "Under
-      development...". The client covers campaigns, budgets and ads only.
+      LiquidM's own README for liquidm-management-api still reads "Under
+      development..." in full — those three words are the entire document. The
+      published client covers campaigns, budgets and ads only, against 15
+      confirmed live v1 collections.
     last_source_change: '2019-04-30'
-corporate:
+decay_signals:
+  observed: '2026-08-13'
   note: >-
-    The liquidm.com marketing domain 301-redirects to https://www.equativ.com/advertisers
-    for every path probed on 2026-07-19, indicating the brand's web presence has
-    been folded into Equativ. The platform host platform.liquidm.com remains live
-    and serves the Ember application, and the Reporting API endpoint still
-    responds. Recorded as an observation; API Evangelist has not sourced a
-    corporate announcement confirming the relationship.
-  observed: '2026-07-19'
+    The API answers, but every artifact around it has stopped moving. Recorded so
+    a consumer can judge maintenance risk before integrating.
+  signals:
+  - signal: marketing-domain-tls-expired
+    detail: >-
+      The liquidm.com certificate expired 2026-07-20. The apex no longer
+      completes a TLS handshake at all; https requests are aborted before any
+      HTTP response. Nobody is renewing the brand's certificate.
+    severity: high
+  - signal: platform-frontend-frozen
+    detail: >-
+      The SPA shell served at platform.liquidm.com carries
+      last-modified: Thu, 25 Jan 2024 10:30:22 GMT — the front end has not been
+      redeployed in over two and a half years.
+    severity: medium
+  - signal: clients-unmaintained
+    detail: >-
+      The Reporting API client was last pushed 2022-10-06; the Management API
+      client 2019-04-30. Neither is published to a package registry.
+    severity: medium
+  - signal: only-published-gem-is-2014
+    detail: >-
+      liquid-ext, the one LiquidM package on a registry, last published 3.5.3 on
+      2014-11-13.
+    severity: low
+  counter_signal: >-
+    Against all of the above, the API itself is not abandoned: nginx 1.17.8 is
+    serving, the Rails stack answers in single-digit milliseconds (x-runtime
+    0.002–0.005s), and a v2 generation exists that postdates every published
+    client. The platform is maintained; its public developer surface is not.
+corporate:
+  status: acquired
+  acquirer: Equativ (formerly Smart AdServer)
+  announced: '2019-12-18'
+  source: https://www.equativ.com/press/smart-acquires-dsp-liquidm
+  note: >-
+    Smart AdServer — since rebranded Equativ — announced the acquisition of
+    LiquidM on 2019-12-18, stating that "LiquidM's technology will be integrated
+    into Smart's technology stack". LiquidM was founded in Berlin in 2013 and was
+    Bertelsmann-owned at the time of sale. This supersedes the earlier round's
+    unsourced observation: the redirect from liquidm.com to
+    https://www.equativ.com/advertisers is the brand consolidation that followed
+    that transaction, now confirmed against the acquirer's own press release.
+    The platform host and both APIs nevertheless remain live and reachable.
+  observed: '2026-08-13'

@@ -1,29 +1,23 @@
 generated: '2026-07-19'
 method: derived
 status: candidate
-source: >-
-  openapi/liquid-m-reporting-openapi.yml, openapi/liquid-m-management-openapi.yml
-note: >-
-  LiquidM publishes no hosted or remote MCP server. This is a candidate tool
-  surface derived one-to-one from the operations in the harvested OpenAPI. It is
-  a proposal for how the LiquidM APIs would be exposed to agents, not a LiquidM
-  claim.
+source: openapi/liquid-m-reporting-openapi.yml, openapi/liquid-m-management-openapi.yml
+note: LiquidM publishes no hosted or remote MCP server. This is a candidate tool surface derived one-to-one
+  from the operations in the harvested OpenAPI. It is a proposal for how the LiquidM APIs would be exposed
+  to agents, not a LiquidM claim.
 server:
   name: liquid-m
   transport: stdio
   url: null
 auth:
   type: api-key
-  detail: >-
-    A single AUTH_TOKEN, obtained from GET /api/auth, sent as the auth_token query
-    parameter. Agents should treat the token as a long-lived credential and must
-    not re-issue it casually, since issuing a new token invalidates the previous
-    one for every other consumer.
+  detail: A single AUTH_TOKEN, obtained from GET /api/auth, sent as the auth_token query parameter. Agents
+    should treat the token as a long-lived credential and must not re-issue it casually, since issuing
+    a new token invalidates the previous one for every other consumer.
 tools:
 - name: get_visual_report
-  description: >-
-    Run a LiquidM Visual Report over a date range, split by dimensions, narrowed
-    by filters, returning the requested metrics.
+  description: Run a LiquidM Visual Report over a date range, split by dimensions, narrowed by filters,
+    returning the requested metrics.
   source_operation: openapi/liquid-m-reporting-openapi.yml#getVisualReport
   read_only: true
 - name: list_campaigns
@@ -40,28 +34,25 @@ tools:
   read_only: false
   consequence: Commits advertising spend envelopes.
 - name: create_campaign
-  description: >-
-    Create a campaign and attach an existing budget. Requires a budget to be
-    created first.
+  description: Create a campaign and attach an existing budget. Requires a budget to be created first.
   source_operation: openapi/liquid-m-management-openapi.yml#createCampaign
   read_only: false
   consequence: Commits advertising spend envelopes.
 - name: create_ad
-  description: >-
-    Create an ad within a campaign, binding creative, supply, targeting and
-    setting sections.
+  description: Create an ad within a campaign, binding creative, supply, targeting and setting sections.
   source_operation: openapi/liquid-m-management-openapi.yml#createAd
   read_only: false
   consequence: Creates a deliverable ad that may spend budget once approved.
 agent_notes:
-- >-
-    There is no idempotency contract on any write operation. Retrying a failed
-    create may produce a duplicate campaign, budget or ad. Agents should confirm
-    by listing before retrying.
-- >-
-    The first-party JavaScript client models a dryrun mode entirely client-side;
-    the API itself has no dry-run parameter, so an agent cannot preview a write
-    server-side.
-- >-
-    Reporting cell "value" fields may change unit representation (microcents to
-    cents); use "formatted_value" for anything shown to a human.
+- There is no idempotency contract on any write operation. Retrying a failed create may produce a duplicate
+  campaign, budget or ad. Agents should confirm by listing before retrying.
+- The first-party JavaScript client models a dryrun mode entirely client-side; the API itself has no dry-run
+  parameter, so an agent cannot preview a write server-side.
+- Reporting cell "value" fields may change unit representation (microcents to cents); use "formatted_value"
+  for anything shown to a human.
+deployment:
+  mode: none
+  verified: derived
+  tools: 6
+  checked: '2026-08-12'
+  source: catalog MCP census

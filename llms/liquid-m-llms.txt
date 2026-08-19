@@ -1,12 +1,16 @@
 # LiquidM
 
 > LiquidM Technology GmbH is a Berlin-based demand-side platform (DSP) for
-> programmatic advertising, backed by Earlybird. Its platform at
+> programmatic advertising, founded 2013, backed early by Earlybird, and acquired
+> by Smart AdServer — now Equativ — in December 2019. Its platform at
 > platform.liquidm.com exposes a Reporting API for campaign performance data and
 > a campaign Management API for campaigns, budgets and ads. LiquidM publishes no
 > developer portal; its APIs are documented in first-party GitHub repositories.
-> The liquidm.com marketing domain now redirects to Equativ, though the platform
-> host and its APIs remain reachable.
+> Both APIs are live, but the documentation has fallen behind the deployment:
+> fifteen v1 collections respond where three are documented, and an undocumented
+> v2 generation answers in JSON:API. The liquidm.com marketing domain no longer
+> serves HTTPS (certificate expired 2026-07-20) and over HTTP redirects to
+> Equativ; the platform host and its APIs remain reachable.
 
 ## APIs
 
@@ -33,9 +37,13 @@
 - [Authentication](authentication/liquid-m-authentication.yml): Single AUTH_TOKEN as a query parameter.
 - [Error catalog](errors/liquid-m-problem-types.yml): HTTP-status-only signalling plus ad section validation errors.
 - [Data model](data-model/liquid-m-data-model.yml): Account, Campaign, Budget, Ad and the four ad sections.
-- [Lifecycle](lifecycle/liquid-m-lifecycle.yml): URI-path versioning, v1 and v2 prefixes, no deprecation policy or status page.
-- [Conformance](conformance/liquid-m-conformance.yml): OpenRTB 2.5, IAB taxonomies, ISO 4217, ISO 8601.
-- [Packages](packages/liquid-m-packages.yml): Two first-party API clients, neither published to a registry.
+- [Lifecycle](lifecycle/liquid-m-lifecycle.yml): URI-path versioning, live v1 and v2 prefixes, the 15-vs-3 surface coverage probe, decay signals, no deprecation policy or status page.
+- [Conformance](conformance/liquid-m-conformance.yml): OpenRTB 2.5, IAB taxonomies, ISO 4217, ISO 8601; JSON:API partial on v2 only.
+- [Packages](packages/liquid-m-packages.yml): Two first-party API clients, neither published to a registry nor versioned.
+- [Plans and pricing](plans/liquid-m-plans-pricing.yml): None published. Access follows the platform account.
+- [Rate limits](rate-limits/liquid-m-rate-limits.yml): None published and none observable at the edge.
+- [Well-known](well-known/liquid-m-well-known.yml): Zero documents. Every /.well-known/ path returns the same SPA shell under a 200.
+- [Agentic access](agentic-access/liquid-m-agentic-access.yml): Recommended x-agentic-access contracts for the 7 spec'd operations.
 - [Agent skills](skills/_index.yml): Run a Visual Report; launch a campaign.
 - [MCP candidate](mcp/liquid-m-mcp.yml): Six-tool candidate surface derived from the specs. No LiquidM-hosted MCP server exists.
 
@@ -49,6 +57,22 @@
 - Reporting cells carry both `value` and `formatted_value`. `formatted_value` is
   persistent; `value` may change unit representation (microcents to cents).
 - Errors are HTTP status codes only. There is no problem+json envelope, no error
-  code registry, and no documented rate limits.
+  code registry, and no documented rate limits. **Three different error envelopes
+  coexist**: `/api/v1/*` returns `{"error":"..."}`, `/api/v2/*` returns a JSON:API
+  document `{"errors":[{"title","detail","status"}]}` under
+  `application/vnd.api+json`, and `/visual_reports.json` returns an empty `{}`.
+  Handle all three.
 - A `200` from ad creation does not mean the ad can deliver — check `meta.errors`,
   `delivery_errors` and `delivery_warnings`.
+- Every response carries an undocumented **`x-request-id`** UUID. It is the only
+  correlation identifier the platform emits — capture it and quote it in any
+  support conversation.
+- **The `/api/v2/` surface is live but has no public contract.** No LiquidM
+  documentation, client or spec describes it. Do not guess its resources: unlike
+  v1, v2 authenticates before it routes, so a `401` from any v2 path — including
+  a nonsense one — says nothing about whether that resource exists.
+- Conversely, **v1 route existence is directly observable**: unrouted v1 paths
+  return `404 {"error":"No Route Matches"}` while real ones return
+  `401 {"error":"No auth token provided"}`.
+- Both published clients predate the current platform. The Management API client
+  was last touched in 2019 and cannot speak to v2. Expect to write your own HTTP.

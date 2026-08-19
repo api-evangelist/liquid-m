@@ -1,0 +1,204 @@
+{
+  "item": [
+    {
+      "id": "ff7192e2-ff32-4032-8ee6-3415c12f3693",
+      "name": "Authentication",
+      "description": {
+        "content": "Auth token issuance for the Reporting API.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f42de52a-5c21-46a7-8d7d-6b4f4e1baa2e",
+          "name": "Issue a Reporting API auth token",
+          "request": {
+            "name": "Issue a Reporting API auth token",
+            "description": {
+              "content": "Exchange LiquidM platform login credentials for an AUTH_TOKEN used on all subsequent Reporting API requests. Requesting a new token invalidates the previous one.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "auth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "email",
+                  "value": "<email>",
+                  "description": "(Required) LiquidM platform login email."
+                },
+                {
+                  "disabled": false,
+                  "key": "password",
+                  "value": "<password>",
+                  "description": "(Required) LiquidM platform login password."
+                },
+                {
+                  "disabled": false,
+                  "key": "api",
+                  "value": "true",
+                  "description": "(Required) Must be true to request an API token."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d893c7a4-90d0-4a54-9f5c-eef40d288976",
+              "name": "An auth token was issued.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "password",
+                      "value": "<password>"
+                    },
+                    {
+                      "key": "api",
+                      "value": "true"
+                    },
+                    {
+                      "key": "auth_token",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b90e4da-a501-401d-89d7-4f2a9914472b",
+              "name": "Authentication failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "email",
+                      "value": "<email>"
+                    },
+                    {
+                      "key": "password",
+                      "value": "<password>"
+                    },
+                    {
+                      "key": "api",
+                      "value": "true"
+                    },
+                    {
+                      "key": "auth_token",
+                      "value": "<API Key>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://platform.liquidm.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "auth_token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0b44e1fe-fd77-4cab-8f93-fc737442f9fb",
+    "name": "LiquidM Management Ads Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.\n\nContact Support:\n Name: LiquidM open source\n Email: opensource@liquidm.com",
+      "type": "text/plain"
+    }
+  }
+}

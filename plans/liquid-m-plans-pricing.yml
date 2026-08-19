@@ -1,0 +1,46 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://liquidm.com/ (TLS handshake fails, certificate expired 2026-07-20; plain
+  HTTP 301s to https://www.equativ.com/advertisers),
+  https://platform.liquidm.com/ (Ember SPA shell, login only),
+  https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md,
+  https://github.com/liquidm/liquidm-management-api/blob/master/README.md
+plan_count: 0
+published: false
+note: >-
+  LiquidM publishes no pricing page, no plan tiers and no quota or overage table
+  for either of its APIs, and there is no longer a marketing site on which one
+  could appear. The liquidm.com apex no longer completes a TLS handshake — its
+  certificate expired on 2026-07-20 — and over plain HTTP it 301-redirects to
+  https://www.equativ.com/advertisers. The surviving surface, platform.liquidm.com,
+  serves only a single-page login application; API access is a function of holding
+  a LiquidM platform account rather than of selecting a published plan. Neither
+  first-party client README mentions cost, tiering, quota or entitlement. Recorded
+  as a measured zero, not an omission: there is nothing published to capture.
+access_model:
+  basis: platform-account
+  detail: >-
+    Both APIs authenticate with an AUTH_TOKEN minted from an existing LiquidM
+    platform login (GET /api/auth). Entitlement therefore follows the commercial
+    relationship behind that account, which LiquidM does not describe publicly.
+  source: authentication/liquid-m-authentication.yml
+corporate_context:
+  note: >-
+    LiquidM was acquired by Smart AdServer — now Equativ — announced 2019-12-18,
+    and its technology was folded into the acquirer's stack. Any current
+    commercial terms for this platform are negotiated through Equativ and are not
+    published under the LiquidM brand.
+  source: https://www.equativ.com/press/smart-acquires-dsp-liquidm
+plans: []
+evidence:
+- url: https://liquidm.com/
+  status: 000
+  detail: TLS certificate expired; connection closed before an HTTP response.
+- url: http://liquidm.com/
+  status: 301
+  detail: Redirects to https://www.equativ.com/advertisers.
+- url: https://platform.liquidm.com/
+  status: 200
+  detail: Ember SPA shell, no pricing content; last-modified 2024-01-25.
+checked: '2026-08-13'

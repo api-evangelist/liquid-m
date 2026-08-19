@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "LiquidM Management Ads Authentication API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "auth_token",
+      "value": "{{auth_token}}",
+      "placement": "query"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Issue a Reporting API auth token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://platform.liquidm.com/api/v1/api/auth",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "LiquidM platform login email."
+              },
+              {
+                "name": "password",
+                "value": "",
+                "type": "query",
+                "description": "LiquidM platform login password."
+              },
+              {
+                "name": "api",
+                "value": "",
+                "type": "query",
+                "description": "Must be true to request an API token."
+              }
+            ]
+          },
+          "docs": "Exchange LiquidM platform login credentials for an AUTH_TOKEN used on all subsequent Reporting API requests. Requesting a new token invalidates the previous one."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
