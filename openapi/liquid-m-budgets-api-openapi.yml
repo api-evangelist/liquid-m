@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: LiquidM Management Ads Budgets API
+  title: LiquidM Management Budgets API
   version: v1
   description: 'Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.'
   contact:
@@ -71,17 +71,21 @@ components:
         unit_price_cents:
           type: integer
         overall_cents:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         overall_units:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         daily_cents:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         daily_units:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         overall_units_pacing:
           type: string
           example: optimized
@@ -95,8 +99,9 @@ components:
           type: string
           example: optimized
         campaign_id:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         budget_touched:
           type: boolean
           readOnly: true

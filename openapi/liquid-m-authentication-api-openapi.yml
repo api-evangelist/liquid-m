@@ -1,25 +1,20 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: LiquidM Management Ads Authentication API
-  version: v1
-  description: 'Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.'
+  title: LiquidM Reporting Authentication API
+  version: '1.0'
+  description: The LiquidM Reporting API provides access to the reporting data that is also available via the reporting user interface in the LiquidM demand-side platform.
   contact:
     name: LiquidM open source
     email: opensource@liquidm.com
     url: https://github.com/liquidm
-  license:
-    name: MIT
-    url: https://github.com/liquidm/liquidm-management-api/blob/master/LICENSE
   x-apievangelist-provenance:
     generated: '2026-07-19'
     method: generated
-    source: https://github.com/liquidm/liquidm-management-api/blob/master/js/lqmapi.js
-    note: Generated faithfully from LiquidM's own MIT-licensed first-party JavaScript client. Every path, method, parameter, request body wrapper and response field is taken verbatim from that client's request builders and its dry-run response emulators. Nothing is invented. LiquidM's own README marks this API "Under development"; treat the surface as partial.
+    source: https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md
+    note: Generated faithfully from LiquidM's own published Reporting API README and the first-party Ruby client source. No endpoint, parameter, enum value or response field here is invented; every item is documented in that README.
 servers:
-- url: https://platform.liquidm.com/api/v1
-  description: LiquidM Management API v1
-- url: https://platform.liquidm.com/api/v2
-  description: LiquidM Management API v2 prefix, declared by the first-party client. No v2 operations are exercised by the published client.
+- url: https://platform.liquidm.com
+  description: LiquidM platform (production)
 security:
 - authToken: []
 tags:
@@ -70,4 +65,4 @@ components:
       type: apiKey
       in: query
       name: auth_token
-      description: AUTH_TOKEN passed as a query parameter on every request, including POSTs.
+      description: AUTH_TOKEN issued by GET /api/auth, passed as a query parameter on every request.

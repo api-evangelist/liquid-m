@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: LiquidM Management Ads API
   version: v1
@@ -106,16 +106,19 @@ components:
           type: string
           example: incomplete
         approved:
-          type: boolean
-          nullable: true
+          type:
+          - boolean
+          - 'null'
         campaign_id:
           type: integer
         overall_units:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         daily_units:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         section_order:
           type: array
           items:
@@ -128,16 +131,19 @@ components:
         creative_id:
           type: integer
         creative_section_id:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         creative_section_type:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         supply_id:
           type: integer
         supply_section_id:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
         targeting_id:
           type: integer
         setting_id:

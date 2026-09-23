@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: LiquidM Management Ads Campaigns API
+  title: LiquidM Management Campaigns API
   version: v1
   description: 'Campaign management API for the LiquidM demand-side platform. The API is organised around campaigns, budgets and ads: a campaign carries currency, unit type, pacing timezone and IAB category; one or more budgets carry the pacing and spend caps; ads bind creative, supply, targeting and setting sections to a campaign. LiquidM publishes an MIT-licensed first-party JavaScript client (lqmapi.js) that exercises this surface, including a dry-run mode that emulates create responses without writing.'
   contact:
@@ -117,11 +117,13 @@ components:
           type: string
           example: bidopt
         additional_name:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         campaign_info:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         created_at:
           type: string
           format: date-time

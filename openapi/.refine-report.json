@@ -1,22 +1,30 @@
 {
   "provider": "liquid-m",
   "sources": [
-    "liquid-m-ads-api-openapi.yml",
-    "liquid-m-authentication-api-openapi.yml",
-    "liquid-m-budgets-api-openapi.yml",
-    "liquid-m-campaigns-api-openapi.yml",
-    "liquid-m-reporting-api-openapi.yml"
+    "_original/liquid-m-management-openapi.yml",
+    "_original/liquid-m-reporting-openapi.yml"
   ],
   "outputs": [
     "liquid-m-ads-api-openapi.yml",
-    "liquid-m-authentication-api-openapi.yml",
     "liquid-m-budgets-api-openapi.yml",
     "liquid-m-campaigns-api-openapi.yml",
+    "liquid-m-authentication-api-openapi.yml",
     "liquid-m-reporting-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "liquid-m-management-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "liquid-m-reporting-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "liquid-m-ads-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "liquid-m-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "liquid-m-budgets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "liquid-m-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "liquid-m-reporting-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
