@@ -130,6 +130,20 @@ paths:
           description: Authentication was wrong.
 components:
   schemas:
+    ReportRow:
+      type: object
+      description: Map of column id to a cell. Metric cells carry value and formatted_value; entity cells (such as country) carry value and name. formatted_value is persistent while value may change representation (for example microcents to cents).
+      additionalProperties:
+        $ref: '#/components/schemas/ReportCell'
+    ReportColumn:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Column identifier, matching a dimension or metric id.
+        name:
+          type: string
+          description: Human-readable column name as shown in Visual Reports.
     ReportCell:
       type: object
       properties:
@@ -160,20 +174,6 @@ components:
           description: One flat row list (never nested, even with dimensions specified). Each row maps a column id to a value pair.
           items:
             $ref: '#/components/schemas/ReportRow'
-    ReportRow:
-      type: object
-      description: Map of column id to a cell. Metric cells carry value and formatted_value; entity cells (such as country) carry value and name. formatted_value is persistent while value may change representation (for example microcents to cents).
-      additionalProperties:
-        $ref: '#/components/schemas/ReportCell'
-    ReportColumn:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Column identifier, matching a dimension or metric id.
-        name:
-          type: string
-          description: Human-readable column name as shown in Visual Reports.
   securitySchemes:
     authToken:
       type: apiKey

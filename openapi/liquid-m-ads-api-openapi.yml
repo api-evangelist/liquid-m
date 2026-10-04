@@ -84,6 +84,16 @@ paths:
           description: Authentication failed.
 components:
   schemas:
+    AdMeta:
+      type: object
+      properties:
+        errors:
+          type: object
+          description: Per-section validation errors.
+          additionalProperties:
+            type: array
+            items:
+              type: string
     Ad:
       type: object
       properties:
@@ -159,16 +169,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-    AdMeta:
-      type: object
-      properties:
-        errors:
-          type: object
-          description: Per-section validation errors.
-          additionalProperties:
-            type: array
-            items:
-              type: string
   securitySchemes:
     authToken:
       type: apiKey
