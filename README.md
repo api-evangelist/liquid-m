@@ -64,22 +64,151 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-LiquidM Technology GmbH is a Berlin-based demand-side platform (DSP) for
-programmatic advertising, backed by Earlybird. Its platform at
-platform.liquidm.com exposes two developer surfaces:
+LiquidM Technology GmbH is a Berlin-based demand-side platform for programmatic advertising, founded in 2013 and backed early by Earlybird, later Bertelsmann-owned, and acquired by Smart AdServer — now Equativ — in December 2019. Its platform at platform.liquidm.com exposes two developer surfaces: a Reporting API that returns the same data as the platform's Visual Reports UI, split across more than thirty dimensions (campaign, ad, site, domain, device, geo, audience) and thirty-plus metrics (impressions, bids, bid requests, clicks, CTR, win rate, eCPM, conversion funnels, video quartiles); and a campaign Management API covering campaigns, budgets and ads. LiquidM publishes a first-party MIT-licensed JavaScript client for the Management API and an example Ruby client for the Reporting API from a 100-repo public GitHub organization, neither released to a package registry. Both APIs remain live and authenticate, but the published surface has fallen well behind the deployed one: probing confirms fifteen live v1 collections against the three the client documents, and an entirely undocumented v2 generation that answers in JSON:API. The liquidm.com marketing domain no longer serves HTTPS — its certificate expired in July 2026 — and over plain HTTP redirects to Equativ.
 
-- **Reporting API** — the same data as the platform's Visual Reports UI, split
-  across 30 dimensions and 22 metrics.
-- **Management API** — campaigns, budgets and ads. Marked "Under development" by
-  LiquidM.
+**Areas:** Company · Advertising · AdTech · DSP · Programmatic Advertising · Mobile Advertising · Reporting · Analytics · Campaign Management · OpenRTB
 
-LiquidM publishes no developer portal. Both APIs are documented in first-party
-repositories in the [liquidm GitHub organization](https://github.com/liquidm)
-(100 public repos): a full prose reference in the Reporting API client README,
-and an MIT-licensed JavaScript client for the Management API.
+## Liquid M on APIs.io
 
-The liquidm.com marketing domain 301-redirects to Equativ as of 2026-07-19,
-though platform.liquidm.com remains live and the Reporting API endpoint still
-responds (HTTP 401 without a token).
+Everything profiled for Liquid M is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/liquid-m/](https://apis.io/providers/liquid-m/)** — or go straight to one of the APIs or properties below.
 
-Backed by: earlybird
+### APIs (5)
+
+- [Liquid M Ads API](https://apis.io/apis/liquid-m/liquid-m-ads-api/) — The Ads API from Liquid M — 1 operation(s) for ads.
+- [Liquid M Authentication API](https://apis.io/apis/liquid-m/liquid-m-authentication-api/) — Auth token issuance for the Reporting API.
+- [Liquid M Budgets API](https://apis.io/apis/liquid-m/liquid-m-budgets-api/) — The Budgets API from Liquid M — 1 operation(s) for budgets.
+- [Liquid M Campaigns API](https://apis.io/apis/liquid-m/liquid-m-campaigns-api/) — The Campaigns API from Liquid M — 1 operation(s) for campaigns.
+- [Liquid M Reporting API](https://apis.io/apis/liquid-m/liquid-m-reporting-api/) — Visual report queries across dimensions and metrics.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [liquid-m](https://apis.io/servers/liquid-m/liquid-m/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Liquid M Agentic Access](https://apis.io/agentic-access/liquid-m/liquid-m-agentic-access/)
+
+#### JSON Schema (1)
+
+The data models the API reads and writes.
+
+- [LiquidM Visual Report](https://apis.io/schemas/liquid-m/liquid-m-visual-report/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Liquid M Vocabulary](https://apis.io/vocabularies/liquid-m/liquid-m-vocabulary/)
+
+#### Examples (1)
+
+Example requests and responses.
+
+- [Liquid M Visual Report Response](https://apis.io/examples/liquid-m/liquid-m-visual-report-response/)
+
+#### Collections (5)
+
+Postman and Open Collection request collections.
+
+- [LiquidM Management Ads API](https://apis.io/collections/liquid-m/open-liquid-m-ads-api/)
+- [LiquidM Management Ads Authentication API](https://apis.io/collections/liquid-m/open-liquid-m-authentication-api/)
+- [LiquidM Management Ads Budgets API](https://apis.io/collections/liquid-m/open-liquid-m-budgets-api/)
+- [LiquidM Management Ads Campaigns API](https://apis.io/collections/liquid-m/open-liquid-m-campaigns-api/)
+- [LiquidM Management Ads Reporting API](https://apis.io/collections/liquid-m/open-liquid-m-reporting-api/)
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Liquid M Management Overlay](https://apis.io/overlays/liquid-m/liquid-m-management-overlay/)
+- [Liquid M Reporting Overlay](https://apis.io/overlays/liquid-m/liquid-m-reporting-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Liquid M Authentication](https://apis.io/security/liquid-m/liquid-m-authentication/)
+- [Liquid M Domain Security](https://apis.io/security/liquid-m/liquid-m-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Liquid M Plans Pricing](https://apis.io/plans/liquid-m/liquid-m-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Liquid M Rate Limits](https://apis.io/rate-limits/liquid-m/liquid-m-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://liquidm.com)
+- [API reference](https://github.com/liquidm/liquidm-reporting-api-client/blob/master/README.md)
+- [Sign up](https://platform.liquidm.com)
+- [Blog](https://www.equativ.com/blog)
+- [GitHub](https://github.com/liquidm)
+
+## API Evangelist rating
+
+**Kin Score 23.4** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 15.7 |
+| Contract governance | 19.7 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 0.0 |
+
+**Agent readiness 26.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/liquid-m/](https://apis.io/providers/liquid-m/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Liquid M: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/liquid-m/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
